@@ -20,6 +20,10 @@ import java.util.List;
  *
  */
 
+
+
+
+
 public class Grassland {
 
     /**
@@ -34,19 +38,21 @@ public class Grassland {
     private static final String NEWLINE = "\n";
 
 
-
     private static int counterGrass = 0;
     private static int counterCarrots = 0;
     private static int counterRabbits = 0;
 
 
 
-
+    // Percentagens vêm incluídas no simulador (mas podemos ter as nossas próprias)
 
     private static final int MAX_PERCENTAGE = 100;
+    private static final int GRASS_PERCENTAGE = 50;
 
-    private static final int RABBIT_PERCENTAGE = 30;
-    private static final int CARROT_PERCENTAGE = 70;
+    private static final int RABBIT_PERCENTAGE = 10;
+    private static final int CARROT_PERCENTAGE = 40;
+
+
 
     /**
      *  Define any variables associated with an Grassland object here.  These
@@ -76,7 +82,6 @@ public class Grassland {
         this.starveTime = starveTime;
 
         this.random = new Random();
-
 
         startGrasslandLife(); //? can it be positioned here?
     }
@@ -129,9 +134,12 @@ public class Grassland {
      */
 
     public void addCarrot(int x, int y) {
+        //TODO compreender porque estava deste modo
         if (meadowArr[x][y] == GRASS) {
             meadowArr[x][y] = CARROT;
         }
+
+//        meadowArr[x][y] = CARROT;
     }
 
 
@@ -145,9 +153,13 @@ public class Grassland {
      */
 
     public void addRabbit(int x, int y) {
+        //TODO mesma dúvida do de cima
         if (meadowArr[x][y] == GRASS) {
             meadowArr[x][y] = RABBIT;
         }
+
+//        meadowArr[x][y] = RABBIT;
+
     }
 
 
@@ -163,7 +175,7 @@ public class Grassland {
         // Usar o método GetClass para que retorne uma String
         // (usa-se mais matéria assim)
 
-        // usar o .getName() quando se tiver classes
+        // usar o .getName() quando se tiver classes (para nome sem "class" antes, full name this way)
         // ou algo como .getNumericValue (oportunidade de enums)
 
 
@@ -178,6 +190,7 @@ public class Grassland {
      */
 
     //? Porque é que é public? (Dúvida)
+    //TODO alterar para se basearem as regras apenas no anterior )(
     public Grassland timeStep() {
 
         for (int i = 0; i < meadowWidth; i++) {
@@ -185,6 +198,9 @@ public class Grassland {
                 meadowArr[i][j] = GrasslandRules(cellContents(i, j), cellNeighbors(i, j));
             }
         }
+
+
+    // pixeis
 
 
 
@@ -210,14 +226,17 @@ public class Grassland {
          return newGen;
     }
 
-    private ArrayList<Integer> cellNeighbors(int x, int y) {
+    //TODO fazer com módulos (que suportem números negativos)
+
+    //TODO voltar a colocar isto private
+    public ArrayList<Integer> cellNeighbors(int x, int y) {
         ArrayList<Integer> neighborsList = new ArrayList<>();
 
         for (int i = x; i < x + 3; i++) {
             for (int j = y; j < y + 3; j ++) {
                 if (i != (x + 3 / 2) &&
                         j != (y + 3 / 2)) {
-                    neighborsList.add(meadowArr[i][j]);
+                    neighborsList.add(meadowArr[i % 5][j % 5]);
                 }
             }
         }
@@ -256,18 +275,21 @@ public class Grassland {
                 // porque senão podia um coelho comer uma cenoura,
                 // nascer um novo
                 // e outro velho que fosse comer a cenoura acabava por substituir o novo
-
-
-
+                    //! Resposta: NÃO. Cria-se um grassland "novinho em folha"
 
                 int typeOfLife = GRASS;
                 int randomPercentage = random.nextInt(MAX_PERCENTAGE + 1);
 
-                if (randomPercentage < RABBIT_PERCENTAGE) {
-                    typeOfLife = RABBIT;
+                if (randomPercentage < GRASS_PERCENTAGE) {
+                    typeOfLife = GRASS;
                 }
-                else if (randomPercentage < CARROT_PERCENTAGE) {
+                else if (randomPercentage >= GRASS_PERCENTAGE &&
+                         randomPercentage < GRASS_PERCENTAGE + CARROT_PERCENTAGE) {
                     typeOfLife = CARROT;
+                }
+                else if(randomPercentage >= GRASS_PERCENTAGE + CARROT_PERCENTAGE &&
+                        randomPercentage < MAX_PERCENTAGE) {
+                    typeOfLife = RABBIT;
                 }
 
                 this.meadowArr[i][j] = typeOfLife;
@@ -312,10 +334,10 @@ public class Grassland {
         }
 
         if (Main.verbose) {
-            System.out.println(
-                    "CounterGrass = "  + counterGrass + NEWLINE +
-                            "CounterCarrot = " + counterCarrots + NEWLINE +
-                            "CounterRabbits = " + counterRabbits
+            System.out.print(
+                            "CounterGrass  = "  + counterGrass   + "( " + (counterGrass   / (float)(meadowHeight * meadowWidth)) * 100 + " %)"   + NEWLINE +
+                            "CounterCarrot = " + counterCarrots  + "( " + (counterCarrots / (float)(meadowHeight * meadowWidth)) * 100 + " %)" + NEWLINE +
+                            "CounterRabbits = " + counterRabbits + "( " + (counterRabbits / (float)(meadowHeight * meadowWidth)) * 100 + " %)" + NEWLINE
             );
         }
 

@@ -16,7 +16,7 @@ public class Main {
         meadow.printGrassland();
 //        System.out.println(String.toString(meadow.cellNeighbors(3,3)));
         //TODO I was testin this (4 neighbors missing)
-        System.out.println(meadow.cellNeighbors(3,3));
+        System.out.println(meadow.cellNeighbors(2,2));
 
 
 

@@ -232,14 +232,14 @@ public class Grassland {
     public ArrayList<Integer> cellNeighbors(int x, int y) {
         ArrayList<Integer> neighborsList = new ArrayList<>();
 
-        for (int i = x; i < x + 3; i++) {
-            for (int j = y; j < y + 3; j ++) {
-                if (i != (x + 3 / 2) &&
-                        j != (y + 3 / 2)) {
-                    neighborsList.add(meadowArr[i % 5][j % 5]);
-                }
+        for (int i = x - 1; i < x + 2; i++) {
+            for (int j = y - 1; j < y + 2; j ++) {
+                    neighborsList.add(meadowArr[(i + meadowWidth) % meadowWidth][(j + meadowHeight) % meadowHeight]);
             }
         }
+
+
+        neighborsList.remove(5);
 
         return neighborsList;
     }

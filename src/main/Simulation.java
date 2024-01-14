@@ -1,11 +1,16 @@
 package main;
+import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.*;
 
+import static com.sun.java.accessibility.util.AWTEventMonitor.addWindowListener;
 
-   public class Simulation {
 
-       private static final int cellSize = 4;
+public class Simulation {
+
+       private static final int cellSize = 30;
 
        private static int i = 100;                             // Default  width
        private static int j = 100;                            // Default  height
@@ -71,7 +76,7 @@ import java.util.*;
            }
 
 
-           Frame frame = new Frame("Rabbits and Carrots");
+           JFrame frame = new JFrame("Rabbits and Carrots");
 
            frame.setSize(i * cellSize, j * cellSize );
            frame.show();
@@ -84,8 +89,10 @@ import java.util.*;
            canvas.setBackground(Color.white);
            canvas.setSize(i * cellSize, j * cellSize);
            frame.add(canvas);
-           Graphics graphics = canvas.getGraphics();
            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+           Graphics graphics = canvas.getGraphics();
+           frame.setLocationRelativeTo(null);
            //TODO: maybe apply
             //    frame.setResizable(false); // pode dar jeito
             //     ImageIcon image = new ImageIcon("logo.png");
@@ -95,9 +102,10 @@ import java.util.*;
            /**
             *  Create the initial grassland.
             */
-           
+
            try {
               mea = new Grassland(i, j, starveTime);
+              mea.startGrasslandLife();
 
                 /**
                     *  Visit each cell (in a roundabout order); randomly place a rabbit, carrot,
@@ -128,16 +136,25 @@ import java.util.*;
                 /**
                     *  Perform timesteps forever.
                     */
-                
+
+                int i = 0;
                 while (true) {                                              // Loop forever
-                    Thread.sleep(1000);                // Wait one second (1000 milliseconds)
+                    if (i != 0) {
+                        Thread.sleep(1000);                // Wait one second (1000 milliseconds)
+
+                    }
                     draw(graphics, mea);                       // Draw the current meadow
                     //  For fun, you might wish to change the delay in the next line.
                     //  If you make it too short, though, the graphics won't work properly.
                     mea = mea.timeStep();                              // Simulate a timestep
+                    i++;
                 }
+
+
+
             } catch (Exception e) {
                 e.printStackTrace();
+//               e.getMessage();
             }
        }
 

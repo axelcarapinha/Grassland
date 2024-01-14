@@ -73,8 +73,10 @@ public class Grassland {
     }
 
     public Grassland(int i, int j, int starveTime, LifeBeing[][] meadowArray) throws Exception {
+
+
         // Check if the starveTime is a valid nu
-        if (starveTime <= 0) throw new Exception("Error: Invalid starve time");
+        if (starveTime <= 0 || i == 0 || j == 0) throw new Exception("Error: Invalid starve time");
         
         // Meadow properties
         this.meadowArr = meadowArray;
@@ -215,7 +217,7 @@ public class Grassland {
         return new Grassland(this.meadowWidth, this.meadowHeight, this.starveTime, this.nextMeadowArr); // por isso é que no enunciado está "novinho em folha"
     }
 
-    private void grasslandRules(LifeBeing oldGen, ArrayList<LifeBeing> neighborsList) throws Exception {
+    public void grasslandRules(LifeBeing oldGen, ArrayList<LifeBeing> neighborsList) throws Exception {
         switch (oldGen.ID) {
             case GRASS:
                 this.checkGrassRules(((Grass) oldGen), neighborsList);

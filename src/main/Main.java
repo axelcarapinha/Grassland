@@ -1,7 +1,9 @@
-/*
+
 package main;
 
+/*
 public class Main {
+
     public static boolean verbose;
 
     public static void main(String[] args) {
@@ -20,7 +22,7 @@ public class Main {
             
             // ----------------------------------------------
             // Just to test.
-            /*LifeBeing[][] grassland = new LifeBeing[3][3];
+            LifeBeing[][] grassland = new LifeBeing[3][3];
 
             for (int i = 0; i < grassland.length; i++) {
                 for (int j = 0; j < grassland.length; j++) {
@@ -42,5 +44,8 @@ public class Main {
 }
 */
 
+
+
+//TODO ExitOnClose (quando se matarem os coelhos)
 //TODO comparable nos coelhos por causa do starve time
 //TODO retornar valores de erro em funções de contagem

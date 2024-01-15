@@ -3,8 +3,8 @@ package life_beings;
 import main.Grassland;
 
 public class Carrot extends LifeBeing {
-  public Carrot(int x, int y) {
-    super(Grassland.CARROT, x, y);
+  public Carrot(int row, int column) {
+    super(Grassland.CARROT, row, column);
   }
 
   @Override

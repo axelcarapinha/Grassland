@@ -5,8 +5,8 @@ import main.Grassland;
 public class Rabbit extends LifeBeing {
   public int starveTime = 0;
 
-  public Rabbit(int x, int y, int starveTime) {
-    super(Grassland.RABBIT, x, y);
+  public Rabbit(int row, int column, int starveTime) {
+    super(Grassland.RABBIT, row, column);
     this.starveTime = starveTime;
   }
 

@@ -16,7 +16,7 @@ public class Simulation {
 
                for (int y = 0; y < height; y++) { // row
                    for (int x = 0; x < width; x++) { // columns
-                       int contents = mead.cellContents(x, y).ID; //! ACRESCENTADO o .ID
+                       int contents = mead.cellContents(x, y); //! ACRESCENTADO o .ID
                        if (contents == Grassland.RABBIT) {
                            graphics.setColor(Color.GRAY);                   // Draw a red shark
                            graphics.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
@@ -139,7 +139,10 @@ public class Simulation {
                 // Tests
                 // - - - -
                 // L = 1 C = 5
-                System.out.println(mea.cellContents(0, -1));
+//                System.out.println(mea.collectCellNeighbors(0,0));
+
+
+
 
                 // - - - -
                 draw(graphics, mea);                       // Draw the current meadow

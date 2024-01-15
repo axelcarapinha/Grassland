@@ -3,8 +3,8 @@ package life_beings;
 import main.Grassland;
 
 public class Grass extends LifeBeing {
-  public Grass(int x, int y) {
-    super(Grassland.GRASS, x, y);
+  public Grass(int row, int column) {
+    super(Grassland.GRASS, row, column);
   }
 
   @Override

@@ -1,6 +1,5 @@
 package life_beings;
 
-
 public abstract class LifeBeing {
 
   public static final String ANSI_RESET = "\u001B[0m";
@@ -9,12 +8,12 @@ public abstract class LifeBeing {
   public static final String ANSI_GREY = "\u001B[90m";
   //
   public final int ID;
-  public int x, y;
+  public int row, column;
   
-  public LifeBeing(int ID, int x, int y) {
-    this.ID = ID;
-    this.x = x;
-    this.y = y;
+  public LifeBeing(int ID, int row, int column) {
+    this.ID     = ID;
+    this.row    = row;
+    this.column = column;
   }
 
   @Override

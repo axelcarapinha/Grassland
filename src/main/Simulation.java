@@ -1,11 +1,6 @@
 package main;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.util.*;
-
-import static com.sun.java.accessibility.util.AWTEventMonitor.addWindowListener;
 
 public class Simulation {
        private static final int cellSize = 30;
@@ -18,10 +13,9 @@ public class Simulation {
            if (mead != null) {
                int width = mead.width();
                int height = mead.height();
-               System.out.println(mead.width());
 
-               for (int y = 0; y < height; y++) {
-                   for (int x = 0; x < width; x++) {
+               for (int y = 0; y < height; y++) { // row
+                   for (int x = 0; x < width; x++) { // columns
                        int contents = mead.cellContents(x, y).ID; //! ACRESCENTADO o .ID
                        if (contents == Grassland.RABBIT) {
                            graphics.setColor(Color.GRAY);                   // Draw a red shark
@@ -34,7 +28,7 @@ public class Simulation {
                            graphics.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
                        }
                    }
-                }
+               }
            }
        }
 
@@ -71,13 +65,11 @@ public class Simulation {
                    System.out.println("Third argument to Simulation is not an number.");
                }
            }
-
-
            JFrame frame = new JFrame("Rabbits and Carrots");
 
             // FIXME: 
-           // frame.setSize(i * cellSize, j * cellSize );
-           frame.setSize(800, 800);
+           frame.setSize(i * cellSize, j * cellSize );
+           // frame.setSize(800, 800);
            frame.show();
 
            /**
@@ -87,8 +79,8 @@ public class Simulation {
            Canvas canvas = new Canvas();
            canvas.setBackground(Color.white);
            // FIXME:
-           // canvas.setSize(i * cellSize, j * cellSize);
-           canvas.setSize(800, 800);
+           canvas.setSize(i * cellSize, j * cellSize);
+           // canvas.setSize(800, 800);
            frame.add(canvas);
            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -104,59 +96,51 @@ public class Simulation {
             *  Create the initial grassland.
             */
 
-           try {
-              mea = new Grassland(i, j, starveTime);
-              mea.startGrasslandLife();
+            mea = new Grassland(i, j, starveTime);
+            mea.startGrasslandLife();
 
-                /**
-                    *  Visit each cell (in a roundabout order); randomly place a rabbit, carrot,
-                    *  or nothing in each.
-                    */
+            /**
+                *  Visit each cell (in a roundabout order); randomly place a rabbit, carrot,
+                *  or nothing in each.
+                */
 
-                /*Random random = new Random(0);      // Create a "Random" object with seed 0
-                int x = 0;
-                int y = 0;
-                for (int xx = 0; xx < i; xx++) {
-                    x = (x + 78887) % i;           // This will visit every x-coordinate once
-                    if ((x & 8) == 0) {
-                        for (int yy = 0; yy < j; yy++) {
-                            y = (y + 78887) % j;       // This will visit every y-coordinate once
-                            if ((y & 8) == 0) {
-                                int r = random.nextInt();     // Between -2147483648 and 2147483647
-                                if (r < 0) {                        // 50% of cells start with carrot
-                                    mea.addCarrot(x, y);
-                                } else if (r > 1500000000) {     // ~15% of cells start with rabbit
-                                    mea.addRabbit(x, y, 0);
-                                }
-
+            /*Random random = new Random(0);      // Create a "Random" object with seed 0
+            int x = 0;
+            int y = 0;
+            for (int xx = 0; xx < i; xx++) {
+                x = (x + 78887) % i;           // This will visit every x-coordinate once
+                if ((x & 8) == 0) {
+                    for (int yy = 0; yy < j; yy++) {
+                        y = (y + 78887) % j;       // This will visit every y-coordinate once
+                        if ((y & 8) == 0) {
+                            int r = random.nextInt();     // Between -2147483648 and 2147483647
+                            if (r < 0) {                        // 50% of cells start with carrot
+                                mea.addCarrot(x, y);
+                            } else if (r > 1500000000) {     // ~15% of cells start with rabbit
+                                mea.addRabbit(x, y, 0);
                             }
+
                         }
                     }
-                }*/
-
-                /**
-                    *  Perform timesteps forever.
-                    */
-
-                int i = 0;
-                draw(graphics, mea);
-                while (true) {                                              // Loop forever
-                    if (i != 0) {
-                        Thread.sleep(1000 * 3);                // Wait one second (1000 milliseconds)
-                    }
-                    mea.printGrassland(mea.meadowArr);
-                    draw(graphics, mea);                       // Draw the current meadow
-                    //  For fun, you might wish to change the delay in the next line.
-                    //  If you make it too short, though, the graphics won't work properly.
-                    mea = mea.timeStep();                              // Simulate a timestep
-                    i++;
                 }
+            }*/
 
+            /**
+             *  Perform timesteps forever.
+             */
 
-
-            } catch (Exception e) {
-                e.printStackTrace();
-//               e.getMessage();
+            int i = 0;
+            draw(graphics, mea);
+            while (true) {                                              // Loop forever
+                if (i != 0) {
+                    Thread.sleep(1000 * 3);                // Wait one second (1000 milliseconds)
+                }
+                draw(graphics, mea);                       // Draw the current meadow
+                mea.printGrassland();
+                //  For fun, you might wish to change the delay in the next line.
+                //  If you make it too short, though, the graphics won't work properly.
+                // mea = mea.timeStep();                              // Simulate a timestep
+                i++;
             }
        }
 

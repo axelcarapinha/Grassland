@@ -4,9 +4,9 @@ import life_beings.Carrot;
 import life_beings.Grass;
 import life_beings.LifeBeing;
 import life_beings.Rabbit;
+import java.util.Random;
 
 import java.util.ArrayList;
-import java.util.RandomAccess;
 
 /* Grassland.java */
 
@@ -22,9 +22,7 @@ import java.util.RandomAccess;
  *
  *
  */
-
 public class Grassland {
-
     /**
      *  Do not rename these constants.  WARNING:  if you change the numbers, you
      *  will need to recompile Test4.java.  Failure to do so will give you a very
@@ -35,28 +33,20 @@ public class Grassland {
     public final static int CARROT = 2;
     private static final String NEWLINE = "\n";
 
-    private static int counterGrass = 0;
-    private static int counterCarrots = 0;
-    private static int counterRabbits = 0;
-
-    // Percentagens vêm incluídas no simulador (mas podemos ter as nossas próprias)
-
     private static final int MAX_PERCENTAGE = 100;
-    private static final int GRASS_PERCENTAGE = 50;
-
+    private static final int GRASS_PERCENTAGE = 30;
     private static final int RABBIT_PERCENTAGE = 10;
-    private static final int CARROT_PERCENTAGE = 40;
+    private static final int CARROT_PERCENTAGE = 60;
 
     /**
-     *  Define any variables associated with an Grassland object here.  These
+     *  Define any variables associated with an Grassland object here. These
      *  variables MUST be private.
      */
-    public LifeBeing[][] meadowArr;
+    private LifeBeing[][] meadowArr;
     private int width;
     private int height;
 
-    // TODO: Try Make this non static!
-    public static int starveTime;
+    private int starveTime;
 
     /**
      *  Grassland() is a constructor that creates an empty meadow having width i and
@@ -65,18 +55,17 @@ public class Grassland {
      *  @param j is the height of the meadow.
      *  @param starveTime is the number of timesteps rabbits survive without food.
      */
-
     public Grassland(int i, int j, int starveTime) {
         this.width = i;
         this.height = j;
-        Grassland.starveTime = starveTime;
+        this.starveTime = starveTime;
         this.meadowArr = new LifeBeing[i][j];
         this.fillWithGrass();
     }
 
     private void fillWithGrass() {
-    for (int row = 0; row < this.height; row++) {
-        for (int column = 0; column < this.width; column++) {
+        for (int row = 0; row < this.height; row++) {
+            for (int column = 0; column < this.width; column++) {
                 this.meadowArr[row][column] = new Grass(row, column);
             }
         }
@@ -84,18 +73,19 @@ public class Grassland {
 
     public void startGrasslandLife () {
         // Fill the grass land.
-        this.meadowArr = new LifeBeing[][] {
-            {new Grass(0, 0),   new Carrot(0, 1),     new Grass(0, 2),     new Grass(0, 3), new Grass(0, 4),  new Carrot(0, 5)},
-            {new Carrot(1, 0),  new Rabbit(1, 1, 0),  new Grass(1, 2),     new Grass(1, 3), new Grass(1, 4), new Rabbit(1, 5, 0)},
-            {new Grass(2, 0),   new Grass(2, 1),      new Grass(2, 2),     new Grass(2, 3), new Grass(2, 4),  new Grass(2, 5)},
-            {new Grass(3, 0),   new Grass(3, 1),      new Grass(3, 2),     new Grass(3, 3), new Grass(3, 4),  new Grass(3, 5)},
-            {new Grass(4, 0),   new Grass(4, 1),      new Grass(4, 2),     new Grass(4, 3), new Grass(4, 4),  new Grass(4, 5)},
-            {new Carrot(5, 0),  new Carrot(5, 1),     new Grass(5, 2),     new Grass(3, 3), new Grass(5, 4),  new Carrot(5, 5)},
-        };
+        // this.meadowArr = new LifeBeing[][] {
+        //     { new Grass(0, 0), new Rabbit(0, 1,0),        new Rabbit(0, 2,0), new Grass(0, 3), new Grass(0, 4), new Grass(0, 5) },
+        //     { new Grass(1, 0),     new Rabbit(1, 1,0),    new Carrot(1, 2), new Grass(1, 3), new Grass(1, 4), new Grass(1, 0) },
+        //     { new Grass(2, 0),    new Carrot(2, 1), new Grass(2, 2), new Grass(2, 3), new Grass(2, 4), new Grass(2, 5) },
+        //     { new Grass(3, 0),     new Grass(3, 1),    new Carrot(3, 2), new Grass(3, 3), new Grass(3, 4), new Grass(3, 5) },
+        //     { new Grass(4, 0),     new Carrot(4, 1),    new Grass(4, 2), new Grass(4, 3), new Grass(4, 4), new Grass(4, 5) },
+        //     { new Grass(5, 0),     new Grass(5, 1),    new Carrot(5, 2), new Grass(3, 3), new Grass(5, 4), new Grass(5, 5) },
+        // };
 
-        /*
-        for (int i = 0; i < meadowHeight; i++) {
-            for (int j = 0; j < meadowWidth; j++) {
+        Random random = new Random(); 
+        for (int row = 0; row < this.height; row++) {
+
+            for (int column = 0; column < this.width; column++) {
                 // Generate new cells randomly.
                 int typeOfLife = GRASS;
                 
@@ -115,27 +105,17 @@ public class Grassland {
 
                 switch (typeOfLife) {
                     case GRASS:
-                        this.meadowArr[i][j] = new Grass(i, j);
-                        counterGrass++;
+                        this.meadowArr[row][column] = new Grass(row, column);
                         break;
                     case RABBIT:
-                        this.meadowArr[i][j] = new Rabbit(i, j, 0);
-                        counterRabbits++;
+                        this.meadowArr[row][column] = new Rabbit(row, column, 0);
                         break;
                     case CARROT:
-                        this.meadowArr[i][j] = new Carrot(i, j);
-                        counterCarrots++;
+                        this.meadowArr[row][column] = new Carrot(row, column);
                         break;
                 }
             }
         }
-        */
-
-        // There must be at least 1 rabbit in the grassland.
-        // int i = this.random.nextInt(this.width() - 1);
-        // int j = this.random.nextInt(this.height() - 1);
-
-        // meadowArr[i][j] = new Rabbit(i, j, 0);
     }
 
     /**
@@ -144,9 +124,6 @@ public class Grassland {
      */
 
     public int width() { return this.width; }
-
-    // If it returns "of a Grassland object,
-    //? does it need to receive arguments with the address of the object?
 
     /**
      *  height() returns the height of an Grassland object.
@@ -159,8 +136,7 @@ public class Grassland {
      *  starveTime() returns the number of timesteps rabbits survive without food.
      *  @return the number of timesteps rabbits survive without food.
      */
-
-    public int starveTime() { return Grassland.starveTime; }
+    public int starveTime() { return this.starveTime; }
 
 
     /**
@@ -169,9 +145,8 @@ public class Grassland {
      *  @param column is the x-coordinate of the cell to place a carrot in.
      *  @param row is the y-coordinate of the cell to place a carrot in.
      */
-
     public void addCarrot(int column, int row) {
-        if (cellContents(row, column) == Grassland.GRASS) {
+        if (cellContents(column, row) == Grassland.GRASS) { 
             this.meadowArr[row][column] = new Carrot(row, column);
         }
     }
@@ -184,7 +159,7 @@ public class Grassland {
      *  @param row is the y-coordinate of the cell to place a rabbit in.
      */
     public void addRabbit(int column, int row) {
-        if (cellContents(row, column) == Grassland.GRASS) {
+        if (cellContents(column, row) == Grassland.GRASS) {
             this.meadowArr[row][column] = new Rabbit(row, column, 0);
         }
     }
@@ -194,19 +169,61 @@ public class Grassland {
      *  @return a meadow representing the elapse of one timestep.
      */
     public Grassland timeStep() throws Exception {
-        Grassland newGrassland = new Grassland(this.width, this.height, Grassland.starveTime);
+        Grassland newGrassland = new Grassland(this.width, this.height, this.starveTime);
         for (int row = 0; row < this.height; row++) {
             for (int column = 0; column < this.width; column++) {
-                int ruleNumber = grasslandRules(getCell(row, column), collectCellNeighbors(row, column));
+                LifeBeing currentCell = getCell(column, row);
+                int ruleNumber = grasslandRules(currentCell, collectCellNeighbors(row, column));
                 switch (ruleNumber) {
-                    case 1: newGrassland.addCarrot(0, 0); break;
-                    case 2:
-                    case 3:
-                    case 4:
-                    case 5:
-                    case 6:
+                    
+                    // Rabbit eats a carrot.
+                    case 1: 
+                        // newGrassland.addGrass(row, column);
+                        ((Rabbit) currentCell).eatCarrot();
+                        newGrassland.meadowArr[row][column] = currentCell;
+                        break;
+                    
+                    // Rabbit Starves :(
+                    case 2: 
+                        Rabbit curRabbit = (Rabbit) currentCell;
+                        curRabbit.starve();
+                        if (!curRabbit.is_dead(this.starveTime)) {
+                            newGrassland.meadowArr[row][column] = curRabbit;
+                        }
+                        break;
+
+                    // Carrot survives.
+                    case 3: 
+                        newGrassland.meadowArr[row][column] = currentCell;
+                        break;
+
+                    case 4: // Rabbit eats carrot
+                    //     ((Rabbit) currentCell).eatCarrot();
+                    //     newGrassland.meadowArr[row][column] = currentCell;
+                        break;
+
+                    // A RABBIT IS BORN.
+                    case 5: 
+                        newGrassland.addRabbit(column, row);
+                        break;
+                    
+                    // Grass stays alive :)
+                    case 6: 
+                        newGrassland.meadowArr[row][column] = currentCell;
+                        break;
+                    
+                    // A Carrot is planted.
                     case 7:
-                    default: throw new Exception("Error: Invalid rule '" + ruleNumber + "'");
+                        newGrassland.addCarrot(column, row);
+                        break;
+
+                    // A Rabbit is born.
+                    case 8:
+                        newGrassland.addRabbit(column, row);
+                        break;
+
+                    default: 
+                        throw new Exception("Error: Invalid rule '" + ruleNumber + "' with the '" + currentCell + "' life being.");   
                 }
             }
         }
@@ -214,54 +231,92 @@ public class Grassland {
         return newGrassland;
     }
 
-    public int grasslandRules(LifeBeing oldGen, ArrayList<LifeBeing> neighbors) throws Exception {
+    private int grasslandRules(LifeBeing currentCell, ArrayList<LifeBeing> neighbors) throws Exception {
         int rule = 0;
 
-        switch (oldGen.ID) {
-            case GRASS: rule = grassRules(oldGen, neighbors); break;
-            case RABBIT: rule = rabbitRules(oldGen, neighbors); break;
-            case CARROT: rule = carrotRules(oldGen, neighbors); break;
+        switch (currentCell.ID) {
+            case GRASS: rule = grassRules(currentCell, neighbors); break;
+            case RABBIT: rule = rabbitRules(currentCell, neighbors); break;
+            case CARROT: rule = carrotRules(currentCell, neighbors); break;
             default:
-                throw new Exception("Error: Couldn't identify the '" + oldGen + "' with the '" + oldGen.ID + "' ID.");
+                throw new Exception("Error: Couldn't identify the '" + currentCell + "' with the '" + currentCell.ID + "' ID.");
+        }
+        
+        return rule;
+    }
+
+    // Checks the rules 6, 7 and 8.
+    private int grassRules(LifeBeing currentCell, ArrayList<LifeBeing> neighbors) {
+        int rule = 0;
+
+        LifeBeing[] carrotsNei = getOccurrences(neighbors, Grassland.CARROT);
+
+        switch (carrotsNei.length) {
+            case 0:  case 1: rule = 6; break; // Grass stays alive :)
+            default: 
+                LifeBeing[] rabbitsNei = getOccurrences(neighbors, Grassland.RABBIT);
+                rule = rabbitsNei.length <= 1 ? 7 : 8; 
+
+                // RABBIT IS BORN in the 8th rule. (different from rule 5)
+                break;
+              
         }
 
         return rule;
     }
 
-    public int grassRules(LifeBeing oldGen, ArrayList<LifeBeing> neighbors) {
+    // Checks the rules 1 and 2.
+    private int rabbitRules(LifeBeing currentCell, ArrayList<LifeBeing> neighbors) {
         int rule = 0;
+
+        LifeBeing[] carrotsNei = getOccurrences(neighbors, Grassland.CARROT);
+
+        switch (carrotsNei.length) {
+            case 0:  rule = 2; break; // Rule 2 -> rabbit starves :(
+            default: rule = 1; break; // Rule 1 -> rabbit eats carrot
+        }
 
         return rule;
     }
 
-    public int rabbitRules(LifeBeing oldGen, ArrayList<LifeBeing> neighbors) {
+
+    // Checks rules 3, 4 and 5.
+    private int carrotRules(LifeBeing oldGen, ArrayList<LifeBeing> neighbors) {
         int rule = 0;
 
-//        int nCarrots = neighbors.
+        LifeBeing[] rabbitsNei = getOccurrences(neighbors, Grassland.RABBIT);
 
-        return rule;
-    }
-
-    public int carrotRules(LifeBeing oldGen, ArrayList<LifeBeing> neighbors) {
-        int rule = 0;
+        switch (rabbitsNei.length) {
+            case 0:  rule = 3; break; // Rule 3 -> Carrot survives :)
+            case 1: rule = 4;  break; // Rule 4 -> Rabbit eats carrot
+            default: rule = 5; break; // Rule 5 -> A Rabbit 
+        }
 
         return rule;
     }
 
     /**
-         *  cellContents() returns EMPTY if cell (x, y) is empty, CARROT if it contains
-         *  a carrot, and RABBIT if it contains a rabbit.
-         *  @param column is the x-coordinate of the cell whose contents are queried.
+     * @return The number of the elements of same type
+     */
+    private LifeBeing[] getOccurrences(ArrayList<LifeBeing> lifeBeings, int lifeId) {
+        return lifeBeings.stream().filter(lf -> lf.ID == lifeId).toArray(LifeBeing[]::new);
+    }
+
+    /**
+     *  cellContents() returns EMPTY if cell (x, y) is empty, CARROT if it contains
+     *  a carrot, and RABBIT if it contains a rabbit.
+     *  @param column is the x-coordinate of the cell whose contents are queried.
      *  @param row is the y-coordinate of the cell whose contents are queried.
      */
     public int cellContents(int column, int row) { // [(row,column) <=> (y, x)] => [(column, row) <=> (x,y)]
         return getCell(column, row).ID;
     }
-    public LifeBeing getCell(int column, int row) { // (row,column) <=> (y, x)
+    
+    private LifeBeing getCell(int column, int row) { // (row,column) <=> (y, x)
         return this.meadowArr[(row + this.width) % this.width][(column + this.height) % this.height];
     }
-
-    public ArrayList<LifeBeing> collectCellNeighbors(int x, int y) {
+    
+    private ArrayList<LifeBeing> collectCellNeighbors(int x, int y) {
         ArrayList<LifeBeing> neighborsList = new ArrayList<>();
 
         for (int row = x - 1; row < x + 2; row++) {
@@ -270,31 +325,22 @@ public class Grassland {
             }
         }
 
-        // Remove the center field.
+        // Remove the center cell.
         neighborsList.remove(4);
 
         return neighborsList;
     }
-
+    
     public void printGrassland() {
         for (int row = 0; row < height; row++) {
             System.out.print(row + "-> ");
 
             for (int column = 0; column < width; column++) {
                 System.out.print("[" + this.meadowArr[row][column] + "] ");
-                // System.out.println("[" + cellContents(x,y) + "] ");
             }
             System.out.print(NEWLINE);
         }
         System.out.println("Grassland Update:");
-
-        // if (Main.verbose) {
-        //     System.out.print(
-        //                     "CounterGrass  = "  + counterGrass    + "( " + (counterGrass   / (float)(meadowHeight * meadowWidth)) * 100 + " %)" + NEWLINE +
-        //                     "CounterCarrot = "  + counterCarrots  + "( " + (counterCarrots / (float)(meadowHeight * meadowWidth)) * 100 + " %)" + NEWLINE +
-        //                     "CounterRabbits = " + counterRabbits  + "( " + (counterRabbits / (float)(meadowHeight * meadowWidth)) * 100 + " %)" + NEWLINE
-        //     );
-        // }
     }
 }
 

@@ -49,17 +49,4 @@ public class Main {
 }
 */
 
-//TODO ExitOnClose (quando se matarem os coelhos)
-//TODO comparable nos coelhos por causa do starve time
-//TODO retornar valores de erro em funções de contagem
-
-//!
-/*
- * (1) Coelho -> cenoura ???
- * (2) 
- * (3) Cenoura -> Igual CERTOOO
- *TODO (4) Cenoura -> Coelho XXXXX (MUDAR ID PARA RABBIT)
- */
-
-
 

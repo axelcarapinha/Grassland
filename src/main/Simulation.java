@@ -131,10 +131,17 @@ public class Simulation {
 
             int i = 0;
             draw(graphics, mea);
-            while (true) {                                              // Loop forever
+            while (true) {  // Loop forever
                 if (i != 0) {
-                    Thread.sleep(1000 * 3);                // Wait one second (1000 milliseconds)
+                    Thread.sleep(1000 * 3); // Wait one second (1000 milliseconds)
                 }
+
+                // Tests
+                // - - - -
+                // L = 1 C = 5
+                System.out.println(mea.cellContents(0, -1));
+
+                // - - - -
                 draw(graphics, mea);                       // Draw the current meadow
                 mea.printGrassland();
                 //  For fun, you might wish to change the delay in the next line.

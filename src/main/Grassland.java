@@ -1,8 +1,11 @@
 package main;
 
+import life_beings.Carrot;
 import life_beings.Grass;
 import life_beings.LifeBeing;
 import life_beings.Rabbit;
+
+import java.util.ArrayList;
 
 /* Grassland.java */
 
@@ -78,7 +81,7 @@ public class Grassland {
             {new Grass(0, 2), new Grass(1, 2),     new Grass(2, 2),     new Grass(3, 2), new Grass(4, 2), new Grass(5, 2)},
             {new Grass(0, 3), new Grass(1, 3),     new Grass(2, 3),     new Grass(3, 3), new Grass(4, 3), new Grass(5, 3)},
             {new Grass(0, 4), new Grass(1, 4),     new Grass(2, 4),     new Grass(3, 4), new Grass(4, 4), new Grass(5, 4)},
-            {new Grass(0, 5), new Grass(1, 5),     new Rabbit(2, 5, 0), new Grass(3, 5), new Grass(4, 5), new Rabbit(5, 5, 0)},
+            {new Carrot(0, 5), new Grass(1, 5),     new Rabbit(2, 5, 0), new Grass(3, 5), new Grass(4, 5), new Rabbit(5, 5, 0)},
         };
 
         /*
@@ -185,8 +188,22 @@ public class Grassland {
      *  @param row is the y-coordinate of the cell whose contents are queried.
      */
 
-    public LifeBeing cellContents(int column, int row) {
-        return this.meadowArr[row][column];
+    public LifeBeing cellContents(int column, int row) { // (row,column) <=> (y, x)
+        return this.meadowArr[(row + this.width) % this.width][(column + this.height) % this.height];
+    }
+    public ArrayList<LifeBeing> collectCellNeighbors(int x, int y) {
+        ArrayList<LifeBeing> neighborsList = new ArrayList<>();
+
+        for (int i = x - 1; i < x + 2; i++) {
+            for (int j = y - 1; j < y + 2; j ++) {
+                neighborsList.add(cellContents(i,j));
+            }
+        }
+
+        // Remove the center field.
+        neighborsList.remove(5);
+
+        return neighborsList;
     }
 
     public void printGrassland() {

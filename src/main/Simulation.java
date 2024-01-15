@@ -7,23 +7,22 @@ import java.util.*;
 
 import static com.sun.java.accessibility.util.AWTEventMonitor.addWindowListener;
 
-
 public class Simulation {
-
        private static final int cellSize = 30;
 
-       private static int i = 100;                             // Default  width
-       private static int j = 100;                            // Default  height
+       private static int i = 6; //! 100                           // Default  width
+       private static int j = 6; //! 100                         // Default  height
        private static int starveTime = 5;           // Default  starvation time
 
        private static void draw(Graphics graphics, Grassland mead) {
            if (mead != null) {
                int width = mead.width();
                int height = mead.height();
+               System.out.println(mead.width());
 
                for (int y = 0; y < height; y++) {
                    for (int x = 0; x < width; x++) {
-                       int contents = mead.cellContents(x, y).ID;
+                       int contents = mead.cellContents(x, y).ID; //! ACRESCENTADO o .ID
                        if (contents == Grassland.RABBIT) {
                            graphics.setColor(Color.GRAY);                   // Draw a red shark
                            graphics.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
@@ -35,11 +34,9 @@ public class Simulation {
                            graphics.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
                        }
                    }
-               }
+                }
            }
        }
-
-
 
        public static void main(String[] argv) throws InterruptedException {
            Grassland mea;
@@ -78,7 +75,9 @@ public class Simulation {
 
            JFrame frame = new JFrame("Rabbits and Carrots");
 
-           frame.setSize(i * cellSize, j * cellSize );
+            // FIXME: 
+           // frame.setSize(i * cellSize, j * cellSize );
+           frame.setSize(800, 800);
            frame.show();
 
            /**
@@ -87,7 +86,9 @@ public class Simulation {
 
            Canvas canvas = new Canvas();
            canvas.setBackground(Color.white);
-           canvas.setSize(i * cellSize, j * cellSize);
+           // FIXME:
+           // canvas.setSize(i * cellSize, j * cellSize);
+           canvas.setSize(800, 800);
            frame.add(canvas);
            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -112,7 +113,7 @@ public class Simulation {
                     *  or nothing in each.
                     */
 
-                Random random = new Random(0);      // Create a "Random" object with seed 0
+                /*Random random = new Random(0);      // Create a "Random" object with seed 0
                 int x = 0;
                 int y = 0;
                 for (int xx = 0; xx < i; xx++) {
@@ -125,24 +126,25 @@ public class Simulation {
                                 if (r < 0) {                        // 50% of cells start with carrot
                                     mea.addCarrot(x, y);
                                 } else if (r > 1500000000) {     // ~15% of cells start with rabbit
-                                    mea.addRabbit(x, y);
+                                    mea.addRabbit(x, y, 0);
                                 }
 
                             }
                         }
                     }
-                }
+                }*/
 
                 /**
                     *  Perform timesteps forever.
                     */
 
                 int i = 0;
+                draw(graphics, mea);
                 while (true) {                                              // Loop forever
                     if (i != 0) {
-                        Thread.sleep(1000);                // Wait one second (1000 milliseconds)
-
+                        Thread.sleep(1000 * 3);                // Wait one second (1000 milliseconds)
                     }
+                    mea.printGrassland(mea.meadowArr);
                     draw(graphics, mea);                       // Draw the current meadow
                     //  For fun, you might wish to change the delay in the next line.
                     //  If you make it too short, though, the graphics won't work properly.

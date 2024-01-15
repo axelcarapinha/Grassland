@@ -9,4 +9,13 @@ public class Rabbit extends LifeBeing {
     super(Grassland.RABBIT, x, y);
     this.starveTime = starveTime;
   }
+
+  public boolean is_dead() {
+    return this.starveTime > Grassland.starveTime;
+  }
+
+  @Override
+  public String toString() {
+    return LifeBeing.ANSI_GREY + super.toString() + LifeBeing.ANSI_RESET;
+  }
 }

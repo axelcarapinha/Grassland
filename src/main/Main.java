@@ -1,7 +1,15 @@
 
+/*
 package main;
 
-/*
+import java.util.ArrayList;
+
+import life_beings.Carrot;
+import life_beings.LifeBeing;
+import life_beings.Grass;
+import life_beings.Rabbit;
+
+
 public class Main {
 
     public static boolean verbose;
@@ -9,33 +17,30 @@ public class Main {
     public static void main(String[] args) {
         // Print "debugging" information.
         verbose = args.length > 0 && (args[0].equals("--verbose") || args[0].equals("-v"));
-
+        
         try {
             // Custom grassland.
-            Grassland meadow = new Grassland(5, 5, 3);
+            Grassland meadow = new Grassland(6, 6, 3);
             meadow.startGrasslandLife();
-            while(true) {
-                meadow.printGrassland();
-                meadow = meadow.timeStep();
-                Thread.sleep(1000);
-            }
             
-            // ----------------------------------------------
-            // Just to test.
-            LifeBeing[][] grassland = new LifeBeing[3][3];
+            // ArrayList<LifeBeing> l = new ArrayList<>();
+            // for (int i = 0; i < 36; i++) {
+            //     l.add(new Grass(0, 0));
+            // }
+            // l.add(new )
+            
+            System.out.println("Old Grassland: ");
+            meadow.printGrassland(meadow.meadowArr);
 
-            for (int i = 0; i < grassland.length; i++) {
-                for (int j = 0; j < grassland.length; j++) {
-                    grassland[i][j] = new Grass(i, j); 
-                }
-            }
+            ArrayList<LifeBeing> neighbours = new ArrayList<>(8);
+            neighbours.add(new Grass(0, 0)); neighbours.add(new Grass(0, 1)); neighbours.add(new Grass(0, 2));
+            neighbours.add(new Grass(1, 0));                                  neighbours.add(new Grass(1, 2));
+            neighbours.add(new Grass(2, 0)); neighbours.add(new Grass(2, 1)); neighbours.add(new Grass(2, 2));
+            meadow.checkRabbitRules((Rabbit) (meadow.meadowArr[1][1]), neighbours);
 
-            for (int i = 0; i < grassland.length; i++) {
-                for (int j = 0; j < grassland.length; j++) {
-                    System.out.println(grassland[i][j]);
-                }
-            }
-            // ---------------------------------------------
+            System.out.println("New Grassland: ");
+            // System.out.println(((Rabbit)neighbours.get(0)).starveTime);
+            meadow.printGrassland(meadow.nextMeadowArr);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -44,8 +49,17 @@ public class Main {
 }
 */
 
-
-
 //TODO ExitOnClose (quando se matarem os coelhos)
 //TODO comparable nos coelhos por causa do starve time
 //TODO retornar valores de erro em funções de contagem
+
+//!
+/*
+ * (1) Coelho -> cenoura ???
+ * (2) 
+ * (3) Cenoura -> Igual CERTOOO
+ *TODO (4) Cenoura -> Coelho XXXXX (MUDAR ID PARA RABBIT)
+ */
+
+
+

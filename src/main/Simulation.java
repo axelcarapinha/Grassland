@@ -6,8 +6,8 @@ import java.util.Random;
 public class Simulation {
        private static final int cellSize = 10;
 
-       private static int i = 100;  // Default  width
-       private static int j = 100;  // Default  height
+       private static int i = 100;        // Default  width
+       private static int j = 100;        // Default  height
        private static int starveTime = 5; // Default  starvation time
 
        private static void draw(Graphics graphics, Grassland mead) {

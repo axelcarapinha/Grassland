@@ -200,6 +200,7 @@ public class Grassland {
                     case 4: // Rabbit eats carrot
                     //     ((Rabbit) currentCell).eatCarrot();
                     //     newGrassland.meadowArr[row][column] = currentCell;
+                    //TODO repetir regtra, ter sempre isso
                         break;
 
                     // A RABBIT IS BORN.

@@ -5,7 +5,11 @@ import life_beings.Grass;
 import life_beings.LifeBeing;
 import life_beings.Rabbit;
 import java.util.Random;
-import main.InvalidGrasslandRuleException;
+
+import exceptions.InvalidGrasslandException;
+//
+import exceptions.InvalidGrasslandRuleException;
+import exceptions.InvalidGrasslandSizeException;
 
 import java.util.ArrayList;
 
@@ -32,6 +36,7 @@ public class Grassland {
     public final static int GRASS = 0;
     public final static int RABBIT = 1;
     public final static int CARROT = 2;
+    public static final int MAX_TIME = 5;   
     private static final String NEWLINE = "\n";
 
     private static final int MAX_PERCENTAGE = 100;
@@ -56,7 +61,8 @@ public class Grassland {
      *  @param j is the height of the meadow.
      *  @param starveTime is the number of timesteps rabbits survive without food.
      */
-    public Grassland(int i, int j, int starveTime) {
+    public Grassland(int i, int j, int starveTime) throws InvalidGrasslandException {
+        if (i <= 0 || j <= 0) throw new InvalidGrasslandSizeException("Width or hight is negative. Please, try again.");
         this.width = i;
         this.height = j;
         this.starveTime = starveTime;
@@ -83,6 +89,7 @@ public class Grassland {
         //     { new Grass(5, 0),     new Grass(5, 1),    new Carrot(5, 2), new Grass(3, 3), new Grass(5, 4), new Grass(5, 5) },
         // };
 
+
         Random random = new Random(); 
         for (int row = 0; row < this.height; row++) {
 
@@ -106,7 +113,6 @@ public class Grassland {
 
                 switch (typeOfLife) {
                     case GRASS:
-                        this.meadowArr[row][column] = new Grass(row, column);
                         break;
                     case RABBIT:
                         this.meadowArr[row][column] = new Rabbit(row, column, 0);
@@ -118,6 +124,7 @@ public class Grassland {
             }
         }
     }
+
 
     /**
      *  width() returns the width of an Grassland object.

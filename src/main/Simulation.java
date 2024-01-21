@@ -2,6 +2,12 @@ package main;
 import javax.swing.*;
 import java.awt.*;
 import java.util.Random;
+import java.util.ArrayList;
+
+import exceptions.InvalidGrasslandException;
+//
+import exceptions.InvalidGrasslandRuleException;
+import exceptions.InvalidGrasslandSizeException;
 
 public class Simulation {
        private static final int cellSize = 10;
@@ -9,31 +15,10 @@ public class Simulation {
        private static int i = 100;        // Default  width
        private static int j = 100;        // Default  height
        private static int starveTime = 5; // Default  starvation time
+        
+       private static ArrayList<Grassland> timestamps =  new ArrayList<>(23); // default starting size for the timeStamps array
 
-       private static void draw(Graphics graphics, Grassland mead) {
-           if (mead != null) {
-               int width = mead.width();
-               int height = mead.height();
-
-               for (int y = 0; y < height; y++) { // Go through each row.
-                   for (int x = 0; x < width; x++) { // Go through each column.
-                       int contents = mead.cellContents(x, y); 
-                       if (contents == Grassland.RABBIT) {
-                           graphics.setColor(Color.GRAY);                   
-                           graphics.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
-                       } else if (contents == Grassland.CARROT) {
-                           graphics.setColor(Color.ORANGE);                
-                           graphics.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
-                       } else {
-                           graphics.setColor(Color.GREEN);
-                           graphics.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
-                       }
-                   }
-               }
-           }
-       }
-
-       public static void startGrassland(Grassland mea) {
+        public static void startGrassland(Grassland mea) {
             /**
                 *  Visit each cell (in a roundabout order); randomly place a rabbit, carrot,
                 *  or nothing in each.
@@ -59,10 +44,35 @@ public class Simulation {
                     }
                 }
             }
+        }
+
+       private static void draw(Graphics graphics, Grassland mead) {
+           if (mead != null) {
+               int width = mead.width();
+               int height = mead.height();
+
+               for (int y = 0; y < height; y++) { // Go through each row.
+                   for (int x = 0; x < width; x++) { // Go through each column.
+                       int contents = mead.cellContents(x, y); 
+                       if (contents == Grassland.RABBIT) {
+                           graphics.setColor(Color.GRAY);                   
+                           graphics.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
+                       } else if (contents == Grassland.CARROT) {
+                           graphics.setColor(Color.ORANGE);                
+                           graphics.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
+                       } else {
+                           graphics.setColor(Color.GREEN);
+                           graphics.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
+                       }
+                   }
+               }
+           }
        }
 
        public static void main(String[] argv) throws InterruptedException {
            Grassland mea;
+
+            InputWindow inputWindow = new InputWindow();
 
            /**
             *  Read the input parameters.
@@ -119,31 +129,42 @@ public class Simulation {
             //     frame.setIconImage(image.getImage());
             //     frame.getContentPane().setBackground(new Color(0x000000));
 
-            // Create the initial grassland. 
-            mea = new Grassland(i, j, starveTime);
-            // mea.startGrasslandLife(); // has a built-in random
-            Simulation.startGrassland(mea);
+            // Create the initial grassland.
 
-            // Perform timesteps forever. 
-            int i = 0;
-            while (true) {  // Loop forever
-                if (i != 0) {
-                    Thread.sleep(1000); // Wait one second (1000 milliseconds)
+            try {
+
+                mea = new Grassland(i, j, starveTime);
+                // mea.startGrasslandLife(); // has a built-in random
+                Simulation.startGrassland(mea);
+
+                // Perform timesteps forever. 
+                int i = 0;
+                while (i < Grassland.MAX_TIME) {  // Loop forever
+                    if (i != 0) {
+                        Thread.sleep(1000); // Wait one second (1000 milliseconds)
+                    }
+
+                    // Draw the current meadow.
+                    mea.printGrassland();
+                    draw(graphics, mea); 
+
+                    // Simulate a time-step.
+                    try {
+                        mea = mea.timeStep();
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                        e.printStackTrace();
+                    }
+                    i++;
+
+                    // Save the state for future reference
+                    Simulation.timestamps.add(mea);
                 }
-
-                // Draw the current meadow.
-                mea.printGrassland();
-                draw(graphics, mea); 
-
-                // Simulate a time-step.
-                try {
-                    mea = mea.timeStep();
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                    e.printStackTrace();
-                }
-                i++;
+            } catch(InvalidGrasslandException e) {
+                e.printStackTrace();
+                e.getMessage();
             }
+            // System.exit(0);
        }
 
    }

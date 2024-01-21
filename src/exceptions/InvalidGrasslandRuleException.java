@@ -1,6 +1,6 @@
-package main;
+package exceptions;
 
-public class InvalidGrasslandRuleException extends Exception {
+public class InvalidGrasslandRuleException extends InvalidGrasslandException {
    public InvalidGrasslandRuleException(String message) {
        super(message);
    }

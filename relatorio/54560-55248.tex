@@ -12,9 +12,18 @@
 \usetikzlibrary{fit} % To merge nodes.
 
 %\usepackage[utf8x]{inputec}
-
-\setmainfont{times.ttf}
+\usepackage{color}   %May be necessary if you want to color links
+\usepackage{hyperref}
+\setmainfont[ItalicFont={timesi.ttf},
+						BoldItalicFont={timesbd.ttf}]{times.ttf}
 \definecolor{light_blue}{RGB}{212,235,242}
+
+% Edit table of contents links.
+\hypersetup{
+    colorlinks=true,  %set true if you want colored links
+    linktoc=all,      %set to all if you want both sections and subsections linked
+    linkcolor=black,  %choose some color if you want links to stand out
+}
 
 \title {Relatório Programação de II}
 
@@ -36,92 +45,123 @@
 \end{figure}
 \maketitle
 
+\renewcommand{\thesection}{\arabic{section}}
+\makeatother
 
 \tableofcontents 
 \newpage
 
-\section*{Abstract}
-Este trabalho teve como principal objetivo usar Java e o paradigma da programação orientada a objetos (POO) 
-para recriar as regras de uma versão do jogo da vida (de John Conway) com cenouras, coelhos e ervas,
-sendo usada a biblioteca AWT e a framework Swing, ambas de Java, para mostrar os resultados.
+\section{Abstract}
+	Este trabalho teve como principal objetivo usar Java e o paradigma da 
+	programação orientada a objetos (POO) 
+	para recriar as regras de uma versão do jogo da vida (de John Conway) 
+	com cenouras, coelhos e ervas,
+	sendo usada a biblioteca AWT e a framework Swing, ambas de Java, 
+	para mostrar os resultados.
 
 \section{Resumo do projeto}
-O principal objetivo deste projeto foi preencher um prado verde retangular com coelhos e cenouras 
-nas células (também retangulare) indexadas, tendo este extremidades adjacentes, como num toro topológico.\\
+	O principal objetivo deste projeto foi preencher um prado verde retangular 
+	com coelhos e cenouras nas células indexadas, também retangulares.\\
+	O prado tem extremidades adjacentes, como num toro topológico.\\
+	As (no fundo únicas) entidades deste prado interagem entre si através das 
+	regras aplicadas, podendo nascer, sobreviver, morrer e, apenas no caso 
+	dos coelhos, passar fome.\\
+	Assim, cada prado é definido pelo tamanho, pela posição inicial dos coelhos,
+	pelas cenouras e pelo tempo de fome \textit{starveTime}, que define quanto 
+	tempo os coelhos sobrevivem sem comer cenouras.\\
+	Tal como no jogo da vida de John Conway, diferentes ajustes nestas definições 
+	do prado geram resultados variadíssimos, e padrões complexos podem surgir 
+	de regras tão básicas como as utilizadas, e resumidas em \textit{timeStep()}: 
+	o mais importante método de instância de cada objeto da classe \textit{Grassland}.
 
-As (no fundo únicas) entidades deste prado interagem entre si através das regras aplicadas,
-podendo nascer, sobreviver, morrer e, apenas no caso dos coelhos, passar fome.\\
+\section{Introdução}
+	O objetivo deste relatório é mostrar a estrutura do programa, 
+	além de explicar com mais detalhe pormenores de implementação e 
+	resumir os resultados.\\
 
-Assim, cada prado é definido por tamanho, posição inicial dos coelhos e cenouras, e tempo de fome
-\textit{Starve Time}, que define quanto tempo os coelhos sobrevivem sem comer cenouras.
+\section{Desenvolvimento}
+	\subsection{Decisões de implementação}
+	\begin{itemize}
+		\renewcommand\labelitemi{--}
+		\item Foi usado apenas um array bidimensional.
+		\item Cada entidade tem um ID, que no fundo serve para identificar a classe,
+					o que permite uma conexão facilitada com o ficheiro 
+					\textit{Simulation.java}. Acaba por ser a utilização das constantes 
+					inteiras de classe GRASS, RABBIT e CARROT.\\
+					Por conta disso, \textit{cellContents()} retorna o ID do objeto 
+					retornado pelo método \textit{getCell()} que retorna o endereço 
+					da entidade guardado no array do prado instanciado.
+		\item O método de instância \textit{startGrasslandLife()} contém código 
+					comentado que se mostrou notoriamente útil na verificação das 
+					regras deste projeto e uma lógica com o mesmo intuito da presente 
+					no ficheiro \textit{Simulation.java}: preencher o prado 
+					aleatoriamente.
+		\item Foram mantidos muitos métodos de instância com o modificador \textit{public} 
+					para serem acedidos pelo ficheiro \textit{Simulation.java}. Os únicos 
+					métodos privados estão relacionados com implementações das regras e 
+					cálculos auxiliares para as mesmas.
+		\item Foi alterada a ordem de utilização dos argumentos dos métodos que 
+					acedem ao array devido a preferirmos uma interpretação diferente de 
+					posições no array (linha (\textit{row}) e coluna (\textit{column})),
+					mas mantendo a compatibilidade com a interpretação presente no 
+					ficheiro \textit{Simulation.java} (\textit{x}, \textit{y}).
+		\item Foi criada uma classe própria para excepções relacionadas com a 
+					ausência de coelhos no prado, para alertar o utilizador de situações 
+					que poderiam parecer estranhas, e para conseguir implementar mais 
+					partes da matéria lecionada, outro dos objetivos deste projeto.
+		\item Utilizou-se uma JFrame em vez de uma Frame, por ser mais leve em 
+					termos de utilização de recursos e por possuir mais funcionalidades.
+	\end{itemize}	
 
-Tal como no jogo da vida de John Conway, 
-diferentes ajustes nestas definições do prado geram resultados variadíssimos,
-e padrões complexos podem surgir de regras tão básicas como as utilizadas, 
-e resumidas em \textit{timeStep()}: o mais importante método de instância de cada objeto da classe \textit{Grassland}, .
+	\subsection{Principais dificuldades}
+		Em primeiro lugar, surgiu uma dúvida: seria melhor usarmos um array 
+		intermediário ou instanciar e alterar diretamente o novo Grassland?
 
-\section*{Introdução}
-O objetivo deste relatório é mostrar a estrutura do programa, 
-além de explicar com mais detalhe pormenores de implementação e resumir os resultados.\\
+		Por um lado, a primeira opção parecia adequada quando foi primeiramente 
+		implementada: teriamos o 'meadowArr', uma variável de instância (um array) 
+		do atual Grassland no qual as regras eram baseadas, e o 'newMeadowArr', 
+		também variável de instância, mas esta última para se escreverem os resultados 
+		da aplicação dessas mesmas regras.
 
-\section*{Desenvolvimento}
-	\subsection*{Decisões de implementação}
-	- Foi usado apenas um array bidimensional.\\
-	- Cada entidade tem um ID, que no fundo serve para identificar a classe,
-	e que permite uma conexão facilitada com o ficheiro \textit{Simulation.java}. 
-	Acaba por ser a utilização das constantes inteiras de classe GRASS, RABBIT e CARROT.\\
-	Por conta disso, \textit{cellContents()} retorna o ID do objeto retornado pelo método 
-	\textit{getCell()} (que retorna o endereço da entidade guardado no array do prado instanciado.)\\
-	- O método de instância \textit{startGrasslandLife()} contém código comentado que se mostrou
-	notoriamente útil na verificação das regras deste projeto e uma lógica
-	com o mesmo intuito da presente no ficheiro \textit{Simulation.java}: preencher o prado aleatoriamente.
-	- Forma mantidos muitos métodos de instância com o modificador \textit{public} 
-	para serem acedidos pelo ficheiro \textit{Simulation.java}. Os únicos métodos privados 
-	estão relacionados com implementações das regras e cálculos auxiliares para as mesmas.
-	- Foi alterada a ordem de utilização dos argumentos das funções que acedem ao array
-	devido a preferirmos uma interpretação diferente de posições no array (linha (\textit{row}) e coluna (\textit{colu})),
-	mas mantendo a compatibilidade com a interpretação presente no ficheiro \textit{Simulation.java} (\textit{x} e \textit{y}).
+		Mas isso originou vários problemas. Com essa implementação faria falta 
+		copiar os dados desse 'newMeadowArr' para o \textit{Grassland} instanciado, 
+		que à parte de \underline{ineficiente}, seria \underline{menos prático}. 
+		Além disso, \underline{tornou-se mais complicada a sincronização dos dados}, 
+		devido à desnecessaria complexidade da lógica. 
+		E ainda, como todos os objetos instanciados referenciavam o seguinte objeto, 
+		preocupou-nos que o \textit{garbage collector} do Java
+		não considerasse o espaço ocupado por prados inutilizados (e por todas as 
+		entidades nele criadas, que são mais espaço que referencia) como livre. 
+		Isso não só seria um grave problema de memória, como vai contra a natureza do 
+		objetivo do próprio programa, pois resultados complexos começam a surgir 
+		após um certo número de iterações, e não deve ser um problema de memória a 
+		definir quando é que a simulação deveria parar.
 
-	- Foi criada uma class própria para excepções relacionadas com a ausência de coelhos no prado,
-	para alertar o utilizador de situações que poderiam parecer estranhas, e para conseguir implementar mais partes da matéria
-	lecionada, outro dos objetivos deste projeto.
-	- Utilizou-se uma JFrame em vez de uma Frame, por ser mais leve em termos de utilização de recursos e por possuir mais funcionalidades.
-	\subsection*{Principais dificuldades}
-	Em primeiro lugar, surgiu uma dúvida: seria melhor usarmos um array intermediário ou instanciar, e alterar diretamente, o novo Grassland?\\
+		Por outro lado, o modo, implementado e mais prático, foi instanciar o 
+		novo Grassland através do atual, 
+		o que se provou útil em todas as fases do desenvolvimento deste trabalho.\\
 
-	Por um lado, a primeira opção parecia adequada quando foi primeiramente implementada: teriamos o 'meadowArr', uma variável de instância (um array) do atual Grassland no qual as regras eram baseadas, 
-	e o 'newMeadowArr', também variável de instância, mas esta última para se escreverem os resultados da aplicação dessas mesmas regras. \\ Mas isso originou vários problemas.
-	Com essa implementação faria falta copiar os dados desse 'newMeadowArr' para o \textit{Grassland} instanciado, que à parte de \underline{ineficiente}, seria \underline{menos prático}. 
-	Além disso, \underline{tornou-se mais complicada a sincronização dos dados}, devido à (desnecessaria) complexidade da lógica. 
-	E ainda, como todos os objetos instanciados referenciavam o seguinte, preocupou-nos que o \textit{garbage collector} do Java
-	não considerasse o espaço ocupado por prados inutilizados (e por todas as entidades nele criadas, que são mais espaço que referencia) como livre. 
-	Isso não só seria um grave problema de memória, como vai contra a natureza do objetivo do próprio programa, pois resultados complexos começam a surgir após
-	um certo número de iterações, e não deve ser um problema de memória a definir quando é que a simulação deveria parar.\\
+		Em segundo e último lugar, surgiu a leitura diferente dos dados por parte do 
+		método \textit{printGrassland()} e do ficheiro \textit{Simulation.java}
+		
+		Então decidimos fazer da seguinte forma para termos a certeza que os 
+		Grasslands anteriores são limpos pelo GarbageCollector.
 
-	Por outro lado, o modo, implementado e mais prático, foi instanciar o novo Grassland através do atual, 
-	o que se provou útil em todas as fases do desenvolvimento deste trabalho.\\
-
-	Em segundo e último lugar, surgiu a leitura diferente dos dados por parte do método \textit{printGrassland()} e do ficheiro \textit{Simulation.java}
-	
-	\begin{minted}[autogobble]{java}
-		public Grassland timeStep() {
-			Grassland newGrassland = new Grassland(this.width, this.height, this.starveTime);
-				for (int row = 0; row < this.height; row++) {
-					for (int column = 0; column < this.width; column++) {
-						// Atualização do novo Grassland depois do atual ter passado pelas regras.
+		\begin{minted}[autogobble, tabsize=2, obeytabs]{java}
+			public Grassland timeStep() {
+				Grassland newGrassland = new Grassland(this.width, this.height, this.starveTime);
+					for (int row = 0; row < this.height; row++) {
+						for (int column = 0; column < this.width; column++) {
+							// Atualização do novo Grassland depois do atual ter passado pelas regras.
+						}
 					}
-				}
-			
-			// Returnamos um novo Grassland.
-			return newGrassland;
-		}
-	\end{minted}
+				 
+				// Retornamos um novo Grassland.
+				return newGrassland;
+			}
+		\end{minted}
 
-	--> COnsiderar dizer isto por outras palavras
-	Assim, é sempre criado um Grassland e substituimos o atual pelo novo, uma solução
-	bem mais simples e que não gera qualquer preocupação.
-
-\section* {Procedimentos}
+\section{Procedimentos}
 \begin{enumerate}
   \item Na execução do programa podem ser passados 3 argumentos pela linha de comandos:
 		\begin{itemize}
@@ -137,9 +177,8 @@ além de explicar com mais detalhe pormenores de implementação e resumir os re
 	\item A cada timestep é gerado um novo prado respeitando as regras a que
 				a geração anterior esteve sujeita.
 \end{enumerate}
-Não foi criado o ficheiro 
 
-\section*{Design Patterns}
+\section{Design Patterns}
 	Recorremos aos três pilares da Programação Orientada a Objetos (encapsulamento 
 	herança e polimorfismo) criámos quatro classes para representar entidades
 	específicas:
@@ -154,7 +193,9 @@ Não foi criado o ficheiro
 					toda a estrutura de dados a respeitos das ervas.
 		\item Grassland \(\rightarrow\) Classe responsável por organizar todos os
 					dados a respeito do campo, marioritariamente a posição dos objetos
-					no campo e o tempo de longevidade dos mesmos. Mantiveram-se as assinaturas dos métodos presentes na implementação base de \textit{Grassland.java}
+					no campo e o tempo de longevidade dos mesmos. Mantiveram-se as 
+					assinaturas dos métodos presentes na implementação base 
+					de \textit{Grassland.java}
 		\item Simulation \(\rightarrow\) Classe principal do programa. Responsável
 					pela renderização e execução do programa.
 	\end{itemize}
@@ -268,49 +309,34 @@ Não foi criado o ficheiro
   \end{tikzpicture}
   \caption{Diagrama de classes}
 \end{figure}
-
-\subsection*{Execução}
-[INSERIR DETALHES DE COMO EXECUTAR, incluindo como desativar a parte textual ou a parte gráfica]
-
-
-\subsection*{Output}
-Os resultados podem ser visíveis de duas formas:
-1. Na linha de comandos, permitindo a execução do método de instância \textit{printGrassland()} no método \textit{startGrasslandLife()}.\\
-2. Numa janela que surge no meio do monitor.\\
-
-
-\section*{Conclusão}
-Em suma, as principais dificuldades foram mitigadas aplicando os resultados das regras diretamente no prado (\textit{Grassland}) instanciado, 
-e o objetivo foi cumprido, havendo resultados visíveis da aplicação das regras da vida.
-Além disso, concluiu-se que o paradigma da POO é especialmente útil para representar problemas 
-de uma forma mais parecia a como os vemos (com objetos com várias partes, que interagem entre si).
-Pode-se referir, por último, que regras simples demonstraram ser capazes de gerar padrões complexos, 
-o que criou um elo de ligação entre o (quase antagónico) determinismo da tecnologia e a imprevisível natureza da vida.
-
 \clearpage % Forces all figures above it in the .tex file to be printed before continuing with the text. This can leave large white spaces. More info in https://tex.stackexchange.com/questions/8625/force-figure-placement-in-text
 
-% Exemplo de insereção de código.
-%\begin{minted}[autogobble]{java}
-%  public static void main(String[] args) {
-%    System.out.println("Hello World!");
-%  }
-%\end{minted}
+\subsection{Execução}	
+	\begin{minted}[autogobble, tabsize=2, obeytabs]{shell-session}
+		javac life_beings/.java && javac main/.java && java main.Simulation
+	\end{minted}
+
+\subsection{Output}
+	Os resultados podem ser visíveis de duas formas:
+	\begin{enumerate}
+		\item Na linha de comandos, permitindo a execução do método de instância 
+		   		\textit{printGrassland()} no método \textit{startGrasslandLife()}.
+		\item Numa janela que surge no meio do monitor.
+	\end{enumerate}
+
+
+\section{Conclusão}
+	Em suma, as principais dificuldades foram mitigadas aplicando os resultados 
+	das regras diretamente no prado (\textit{Grassland}) instanciado, 
+	e o objetivo foi cumprido, havendo resultados visíveis da aplicação das regras 
+	da vida. 
+
+	Além disso, concluiu-se que o paradigma da POO é especialmente útil 
+	para representar problemas de uma forma mais natural a como os vemos,
+	com objetos com várias partes que interagem entre si.
+
+	Pode-se referir, por último, que regras simples demonstraram ser capazes 
+	de gerar padrões complexos, o que criou um elo de ligação entre o 
+	(quase antagónico) determinismo da tecnologia e a imprevisível natureza da vida.
 
 \end {document}
-
-Tarefas a fazer:
-1. IMPORTANTE  
-	exemplo de execução do trabalho com as nossas regras e com o random dela (que se veja textualmente e graficamente)
-	ver se não se escreveu "função" no relatório. São MÉTODOS.
-
-	maxSimulationTime ao fim de X tempo
-	descomentar e fazer regra 4
-	Rabbit not found exception ("muito bem pensado, façam isso")
-	Descomentar certas coisas do trabalho em si.
-2. Extras saborosos XD
-	melhorar o método que randomiza as coisas
-	input por janela
-	Trocar a logica de linha e coluna da prof, para usarmos apenas a nossa logica
-    Fazer o print da cor do texto dos animais no método que faz a parte textual
-	bibliografia (Referencia video do coding train (get cell COntents é igual à dele, e é boa prática, mostra que vimos extras))
-

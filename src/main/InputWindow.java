@@ -15,88 +15,106 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 public class InputWindow extends JFrame implements ActionListener {
-  private boolean simulationReady = false;
-  private JTextField starveField;
-  private JTextField widthField;
-  private JTextField heightField;
+    private boolean simulationReady = false;
+    private JTextField starveField;
+    private JTextField widthField;
+    private JTextField heightField;
+    private JTextField maxTimeField;
 
-  public InputWindow() {
-    super("Settings");
-    this.setSize(150, 140);
-    this.setLocationRelativeTo(null);
-    
-    Container contentPane = getContentPane();
-    contentPane.setBackground(new Color(0xDAC8B3));
-    contentPane.setPreferredSize(this.getSize());
-    this.setLayout(new GridBagLayout());
-    
-    GridBagConstraints gbc = new GridBagConstraints();
-    gbc.anchor = GridBagConstraints.FIRST_LINE_START;
-    gbc.gridx = 0;
-    gbc.gridy = 0;
-    gbc.insets = new Insets(5, 5, 5, 5);  // Optional: Add some spacing between components
-    
-    JLabel labelWidth = new JLabel("Width: ");
-    widthField = new JTextField();
-    widthField.setPreferredSize(new Dimension(50, 20)); 
-    contentPane.add(labelWidth, gbc);
-    gbc.gridx++;
-    contentPane.add(widthField, gbc);
-    gbc.gridy++;
-    gbc.gridx--;
+    public InputWindow() {
+        super("Settings");
+        this.setSize(200, 160);
+        this.setLocationRelativeTo(null);
+        this.setResizable(false);
 
-    JLabel labelHeight = new JLabel("Height: ");
-    heightField = new JTextField(); 
-    heightField.setPreferredSize(new Dimension(50, 20));
+        Container contentPane = getContentPane();
+        contentPane.setBackground(new Color(0xDAC8B3));
+        this.setLayout(new GridBagLayout());
 
-    contentPane.add(labelHeight, gbc);
-    gbc.gridx++;
-    contentPane.add(heightField, gbc);
-    gbc.gridy++;
-    gbc.gridx--;
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(5, 5, 5, 5); // Optional: Add some spacing between components
 
-    JLabel labelstarveTime = new JLabel("StarveTime: ");
-    starveField = new JTextField();
-    starveField.setPreferredSize(new Dimension(50, 20));
+        Dimension defaultDim = new Dimension(50, 20);
 
-    contentPane.add(labelstarveTime, gbc);
-    gbc.gridx++;
-    contentPane.add(starveField, gbc);
-    gbc.gridy++;
-    gbc.gridx--;
+        JLabel labelWidth = new JLabel("Width: ");
+        widthField = new JTextField("100");
+        widthField.setPreferredSize(defaultDim);
+        contentPane.add(labelWidth, gbc);
+        gbc.gridx++;
+        contentPane.add(widthField, gbc);
+        gbc.gridy++;
+        gbc.gridx--;
 
-    JButton button = new JButton("Start");
-    contentPane.add(button, gbc);
+        JLabel labelHeight = new JLabel("Height: ");
+        heightField = new JTextField("100");
+        heightField.setPreferredSize(defaultDim);
 
-    // Add to input.
-    widthField.addActionListener(this);
-    heightField.addActionListener(this);
-    starveField.addActionListener(this);
-    button.addActionListener(this);
+        contentPane.add(labelHeight, gbc);
+        gbc.gridx++;
+        contentPane.add(heightField, gbc);
+        gbc.gridy++;
+        gbc.gridx--;
 
-    this.setVisible(true);
-  }
+        JLabel labelstarveTime = new JLabel("Starve Time: ");
+        starveField = new JTextField("5");
+        starveField.setPreferredSize(defaultDim);
 
-  @Override
-  public void actionPerformed(ActionEvent event) {
-    if (event.getSource() instanceof JButton) {
-      this.simulationReady = true;
+        contentPane.add(labelstarveTime, gbc);
+        gbc.gridx++;
+        contentPane.add(starveField, gbc);
+        gbc.gridy++;
+        gbc.gridx--;
+
+        JLabel labelMaxTime = new JLabel("Nº Generations: ");
+        maxTimeField = new JTextField("23");
+        maxTimeField.setPreferredSize(defaultDim);
+
+        contentPane.add(labelMaxTime, gbc);
+        gbc.gridx++;
+        contentPane.add(maxTimeField, gbc);
+        gbc.gridx--;
+        gbc.gridy++;
+
+        JButton button = new JButton("Start");
+        contentPane.add(button, gbc);
+
+        // Add to input.
+        widthField.addActionListener(this);
+        heightField.addActionListener(this);
+        starveField.addActionListener(this);
+        button.addActionListener(this);
+
+        this.setVisible(true);
     }
-  }
 
-  public boolean isSimulationReady() {
-    return this.simulationReady;
-  }
+    @Override
+    public void actionPerformed(ActionEvent event) {
+        if (event.getSource() instanceof JButton) {
+            this.simulationReady = true;
+            this.setVisible(false);
+        }
+    }
 
-  public int getGrasslandWidth() {
-    return Integer.parseInt(this.widthField.getText());
-  }
+    public boolean isSimulationReady() {
+        return this.simulationReady;
+    }
 
-  public int getGrasslandHeight() {
-    return Integer.parseInt(this.heightField.getText());
-  }
+    public int getGrasslandWidth() {
+        return Integer.parseInt(this.widthField.getText());
+    }
 
-  public int getGrasslandStarveTime() {
-    return Integer.parseInt(this.starveField.getText());
-  }
+    public int getGrasslandHeight() {
+        return Integer.parseInt(this.heightField.getText());
+    }
+
+    public int getGrasslandStarveTime() {
+        return Integer.parseInt(this.starveField.getText());
+    }
+
+    public int getGrasslandMaxTimeField() {
+        return Integer.parseInt(this.maxTimeField.getText());
+    }
 }

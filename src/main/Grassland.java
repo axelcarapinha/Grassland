@@ -7,17 +7,11 @@ import life_beings.Rabbit;
 import java.util.Random;
 
 import exceptions.InvalidGrasslandException;
-//
 import exceptions.InvalidGrasslandRuleException;
 import exceptions.InvalidGrasslandSizeException;
 import exceptions.InvalidGrasslandPercentagesException;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.TreeMap;
 
 /* Grassland.java */
 
@@ -30,8 +24,6 @@ import java.util.TreeMap;
  *
  *  that creates an empty meadow having width i and height j, in which rabbits
  *  starve after starveTime timesteps.
- *
- *
  */
 public class Grassland {
     /**
@@ -40,13 +32,11 @@ public class Grassland {
      *  hard-to-find bug.
      */
 
-    //TODO:
-    // [INSERT NAME] 
+    // ID'S 
     //
     public final static int GRASS = 0;
     public final static int RABBIT = 1;
     public final static int CARROT = 2;
-    public static final int MAX_TIME = 20;   
     private static final String NEWLINE = "\n";
 
     // 
@@ -74,7 +64,8 @@ public class Grassland {
      *  @param j is the height of the meadow.
      *  @param starveTime is the number of timesteps rabbits survive without food.
      */
-    public Grassland(int i, int j, int starveTime, int grassPercentage, int rabbitPercentage, int carrotPercentage) throws InvalidGrasslandException {
+    public Grassland(int i, int j, int starveTime, int grassPercentage, 
+                     int rabbitPercentage, int carrotPercentage) throws InvalidGrasslandException {
         if (i <= 0 || j <= 0) throw new InvalidGrasslandSizeException("Width or hight is negative. Please, try again.");
         this.width = i;
         this.height = j;
@@ -89,7 +80,7 @@ public class Grassland {
     }
 
     public Grassland(int i, int j, int starveTime) throws Exception {
-        this(i, j, starveTime, 30, 50, 20);
+        this(i, j, starveTime, 90, 5, 5);
     }
 
     public int getRabbitPercentage() { return this.rabbitPercentage;} 
@@ -388,8 +379,13 @@ public class Grassland {
 
         return neighborsList;
     }
-    
-    public void printGrassland() {
+
+    public void printGrassland(boolean cleanConsole) {
+        if (cleanConsole) {    
+            String CLEAN_CONSOLE = "\\\033[H\\\033[2J";
+            System.out.println(CLEAN_CONSOLE);
+        }
+
         for (int row = 0; row < height; row++) {
             System.out.print(row + "-> ");
 
@@ -399,6 +395,10 @@ public class Grassland {
             System.out.print(NEWLINE);
         }
         System.out.println("Grassland Update:");
+    }
+
+    public void printGrassland() {
+        this.printGrassland(false);
     }
 }
 

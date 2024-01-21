@@ -5,6 +5,7 @@ import life_beings.Grass;
 import life_beings.LifeBeing;
 import life_beings.Rabbit;
 import java.util.Random;
+import main.InvalidGrasslandRuleException;
 
 import java.util.ArrayList;
 
@@ -174,6 +175,10 @@ public class Grassland {
             for (int column = 0; column < this.width; column++) {
                 LifeBeing currentCell = getCell(column, row);
                 int ruleNumber = grasslandRules(currentCell, collectCellNeighbors(row, column));
+
+                // To test the InvalidGrasslandRuleException.java
+                // ruleNumber = 44;
+
                 switch (ruleNumber) {
                     
                     // Rabbit eats a carrot.
@@ -196,11 +201,9 @@ public class Grassland {
                     case 3: 
                         newGrassland.meadowArr[row][column] = currentCell;
                         break;
-
-                    case 4: // Rabbit eats carrot
-                    //     ((Rabbit) currentCell).eatCarrot();
-                    //     newGrassland.meadowArr[row][column] = currentCell;
-                    //TODO repetir regtra, ter sempre isso
+                        
+                    // Carrot is eaten by the rabbit
+                    case 4: 
                         break;
 
                     // A RABBIT IS BORN.
@@ -224,7 +227,7 @@ public class Grassland {
                         break;
 
                     default: 
-                        throw new Exception("Error: Invalid rule '" + ruleNumber + "' with the '" + currentCell + "' life being.");   
+                        throw new InvalidGrasslandRuleException("Error: Invalid rule '" + ruleNumber + "' with the '" + currentCell + "' life being.");   
                 }
             }
         }
@@ -289,7 +292,7 @@ public class Grassland {
 
         switch (rabbitsNei.length) {
             case 0:  rule = 3; break; // Rule 3 -> Carrot survives :)
-            case 1: rule = 4;  break; // Rule 4 -> Rabbit eats carrot
+            case 1:  rule = 4; break; // Rule 4 -> Rabbit eats carrot
             default: rule = 5; break; // Rule 5 -> A Rabbit 
         }
 

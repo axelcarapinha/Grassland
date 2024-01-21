@@ -163,13 +163,14 @@
 
 \section{Procedimentos}
 \begin{enumerate}
-  \item Na execução do programa podem ser passados 3 argumentos pela linha de comandos:
+  \item Na execução do programa podem ser passados quatro argumentos por uma JFrame
+				através de quatro objetos 'JTextField'.
 		\begin{itemize}
-			\item i \(\rightarrow\) O comprimento do prado.
-			\item j \(\rightarrow\) A largura do prado. 
+			\item width \(\rightarrow\) O comprimento do prado.
+			\item height \(\rightarrow\) A largura do prado. 
 			\item starveTime \(\rightarrow\) Número de timesteps a que os coelhos 
-					  sobrevivem sem comer qualquer cenoura. Por defeito, se não passados 
-						quaisquer argumentos, temos \\i = 100, o j = 100 e starveTime = 5.
+					  sobrevivem sem comer qualquer cenoura. 
+			\item maxTime \(\rightarrow\) Número máximo de gerações simuladas.
 		\end{itemize}
 	\item Um prado de comprimento i x j é preenchido com objetos do tipo 'Grass'
 				e são gerados aleatoriamente outros objetos, objetos de tipo 'Rabbit' e 
@@ -196,15 +197,16 @@
 					no campo e o tempo de longevidade dos mesmos. Mantiveram-se as 
 					assinaturas dos métodos presentes na implementação base 
 					de \textit{Grassland.java}
-		\item Simulation \(\rightarrow\) Classe principal do programa. Responsável
-					pela renderização e execução do programa.
+		\item Simulation \(\rightarrow\) Classe responsável
+					pela renderização das gerações.
+		\item Main \(\rightarrow\) Classe responsável pela execução do programa.
 	\end{itemize}
 
 	% Draw the Diagram.
 	\begin{figure}[h] % See https://tex.stackexchange.com/questions/39017/how-to-influence-the-position-of-float-environments-like-figure-and-table-in-lat for more info.
   %\centering
 		\hspace{-2.5cm} % Move whole figure 2.5cm to the left.
-		% \vspace{-2.5cm} % Move whole figure 2.5cm up.	
+		% \vspace{-8.5cm} % Move whole figure 2.5cm up.	
 		\begin{tikzpicture}[>=Stealth]
 
     % --- Begin Life Being Node ---
@@ -270,20 +272,37 @@
 			\draw[->] (CarrotNode.north) -- ++(0,0.5) -| (LifeBeingNode.south);
 			\draw[->] (GrassNode.north) -- ++(0,0.5) -| (LifeBeingNode.south);
 
+  \end{tikzpicture}
+  \caption{Diagrama de classes}
+\end{figure}
+\clearpage % Forces all figures above it in the .tex file to be printed before continuing with the text. This can leave large white spaces. More info in https://tex.stackexchange.com/questions/8625/force-figure-placement-in-text
+
+\begin{figure}[h]
+	\hspace{-2.5cm} % Move whole figure 2.5cm to the left.
+	\begin{tikzpicture}
 			% --- Begin Grassland Node ---
-			\node [draw, rectangle, text width=16.7cm, below=1.0cm of RabbitNode, align=center, fill=light_blue] (Grassland) {Grassland};
-			\node [draw, rectangle, text width=16.7cm, below=0.0cm of Grassland, align=left] (grassland_attributes) {
+			\node [draw, rectangle, text width=16.7cm, align=center, fill=light_blue] (Grassland) {Grassland};
+			\node [draw, rectangle, text width=16.7cm, below= 0.0cm of Grassland, align=left] (grassland_attributes) {
 				+\(\underline{GRASS}\) \\
 				+\(\underline{RABBIT}\) \\
 				+\(\underline{CARROT}\) \\
-				+\(\underline{NEWLINE}\) \\
+				-\(\underline{NEWLINE}\) \\
+				-\(\underline{MAX\_PERCENTAGE}\) \\
+				-GRASS\_PERCENTAGE \\
+				-RABBIT\_PERCENTAGE \\
+				-CARROT\_PERCENTAGE \\
 				-meadowArr \\
 				-width \\
 				-height \\
 				-starveTime \\
 			};
 			\node [draw, rectangle, text width=16.7cm, below=0.0cm of grassland_attributes, align=left] (grassland_methods) {
+				+Grassland(int i, int j, int starveTime, int grassPercentage, 
+									 int rabbit Percentage, int carrotPercentage) \\
 				+Grassland(int i, int j, int starveTime) \\
+				+getRabbitPercentage() : int \\
+				+getCarrotPercentage() : int \\
+				+getGrassPercentage() : int \\
 				-fillWithGrass() \\
 				+startGrasslandLife() \\
 				+width() : int \\
@@ -300,16 +319,17 @@
 				+cellContents(int column, int row) : int \\
 				-getCell(int column, int row) : LifeBeing \\
 				-collectCellNeighbors(int x, int y) : ArrayList<LifeBeing> \\ 
+				+printGrassland(boolean cleanConsole) \\
 				+printGrassland()
 			};
 			
 			% Merge all the nodes so it can turn all this nodes into one.
 			\node [draw, fit={(Grassland) (grassland_attributes) (grassland_methods)}, inner sep=0pt] (GrasslandNode) {};
 			% --- End Grassland Node ---
-  \end{tikzpicture}
-  \caption{Diagrama de classes}
-\end{figure}
-\clearpage % Forces all figures above it in the .tex file to be printed before continuing with the text. This can leave large white spaces. More info in https://tex.stackexchange.com/questions/8625/force-figure-placement-in-text
+		\end{tikzpicture}
+		\caption{Diagrama de classes}
+	\end{figure}
+\clearpage
 
 \subsection{Execução}	
 	\begin{minted}[autogobble, tabsize=2, obeytabs]{shell-session}
@@ -323,7 +343,6 @@
 		   		\textit{printGrassland()} no método \textit{startGrasslandLife()}.
 		\item Numa janela que surge no meio do monitor.
 	\end{enumerate}
-
 
 \section{Conclusão}
 	Em suma, as principais dificuldades foram mitigadas aplicando os resultados 

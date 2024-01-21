@@ -37,12 +37,12 @@ public class Grassland {
     public final static int GRASS = 0;
     public final static int RABBIT = 1;
     public final static int CARROT = 2;
-    private static final String NEWLINE = "\n";
+    private final static String NEWLINE = "\n";
 
     // 
     // Random generation settings
     //
-    private static final int MAX_PERCENTAGE = 100;
+    private final static int MAX_PERCENTAGE = 100;
     private final int grassPercentage; // final, pois uma vez decidida a percentagem, fica fixa
     private final int rabbitPercentage;
     private final int carrotPercentage;
@@ -390,7 +390,7 @@ public class Grassland {
             System.out.print(row + "-> ");
 
             for (int column = 0; column < width; column++) {
-                System.out.print("[" + this.meadowArr[row][column] + "] ");
+                System.out.print(String.format("%-18s","[" + this.meadowArr[row][column] + "] "));
             }
             System.out.print(NEWLINE);
         }

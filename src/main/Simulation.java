@@ -5,13 +5,10 @@ import java.util.Random;
 import java.util.ArrayList;
 
 import exceptions.InvalidGrasslandException;
-//
+
 public class Simulation {
     private static final int cellSize = 10;
 
-    // private static int i = 100;        // Default  width
-    // private static int j = 100;        // Default  height
-    // private static int starveTime = 5; // Default  starvation time
     private int width = 100;        // Default  width
     private int height = 100;        // Default  height
     private int starveTime = 5; // Default  starvation time
@@ -26,9 +23,9 @@ public class Simulation {
 
     public void startGrassland(Grassland mea) {
         /**
-            *  Visit each cell (in a roundabout order); randomly place a rabbit, carrot,
-            *  or nothing in each.
-            */
+         *  Visit each cell (in a roundabout order); randomly place a rabbit, carrot,
+         *  or nothing in each.
+         */
 
         Random random = new Random(0);      // Create a "Random" object with seed 0
         int x = 0;
@@ -45,7 +42,6 @@ public class Simulation {
                         } else if (r > 1500000000) {     // ~15% of cells start with rabbit
                             mea.addRabbit(x, y);
                         }
-
                     }
                 }
             }
@@ -138,6 +134,10 @@ public class Simulation {
         } catch(InvalidGrasslandException | InterruptedException e) {
             e.printStackTrace();
             e.getMessage();
+
+        } catch(Exception e) { // already covers the InputMismatchException 
+            e.getMessage();
+            e.printStackTrace();
         }
     }
 }

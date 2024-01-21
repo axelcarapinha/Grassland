@@ -10,8 +10,14 @@ import exceptions.InvalidGrasslandException;
 //
 import exceptions.InvalidGrasslandRuleException;
 import exceptions.InvalidGrasslandSizeException;
+import exceptions.InvalidGrasslandPercentagesException;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.TreeMap;
 
 /* Grassland.java */
 
@@ -33,16 +39,23 @@ public class Grassland {
      *  will need to recompile Test4.java.  Failure to do so will give you a very
      *  hard-to-find bug.
      */
+
+    //TODO:
+    // [INSERT NAME] 
+    //
     public final static int GRASS = 0;
     public final static int RABBIT = 1;
     public final static int CARROT = 2;
-    public static final int MAX_TIME = 5;   
+    public static final int MAX_TIME = 20;   
     private static final String NEWLINE = "\n";
 
+    // 
+    // Random generation settings
+    //
     private static final int MAX_PERCENTAGE = 100;
-    private static final int GRASS_PERCENTAGE = 30;
-    private static final int RABBIT_PERCENTAGE = 10;
-    private static final int CARROT_PERCENTAGE = 60;
+    private final int grassPercentage; // final, pois uma vez decidida a percentagem, fica fixa
+    private final int rabbitPercentage;
+    private final int carrotPercentage;
 
     /**
      *  Define any variables associated with an Grassland object here. These
@@ -61,14 +74,27 @@ public class Grassland {
      *  @param j is the height of the meadow.
      *  @param starveTime is the number of timesteps rabbits survive without food.
      */
-    public Grassland(int i, int j, int starveTime) throws InvalidGrasslandException {
+    public Grassland(int i, int j, int starveTime, int grassPercentage, int rabbitPercentage, int carrotPercentage) throws InvalidGrasslandException {
         if (i <= 0 || j <= 0) throw new InvalidGrasslandSizeException("Width or hight is negative. Please, try again.");
         this.width = i;
         this.height = j;
         this.starveTime = starveTime;
         this.meadowArr = new LifeBeing[i][j];
         this.fillWithGrass();
+        //
+        if (grassPercentage + rabbitPercentage + carrotPercentage > 100) throw new InvalidGrasslandPercentagesException("Sum of percentages greater than 100.");
+        this.grassPercentage  = grassPercentage; 
+        this.rabbitPercentage = rabbitPercentage;
+        this.carrotPercentage  = carrotPercentage;
     }
+
+    public Grassland(int i, int j, int starveTime) throws Exception {
+        this(i, j, starveTime, 30, 50, 20);
+    }
+
+    public int getRabbitPercentage() { return this.rabbitPercentage;} 
+    public int getCarrotPercentage() { return this.carrotPercentage; }
+    public int getGrassPercentage()  { return this.grassPercentage; }
 
     private void fillWithGrass() {
         for (int row = 0; row < this.height; row++) {
@@ -78,7 +104,7 @@ public class Grassland {
         }
     }
 
-    public void startGrasslandLife () {
+    public void startGrasslandLife() throws Exception {
         // Fill the grass land.
         // this.meadowArr = new LifeBeing[][] {
         //     { new Grass(0, 0), new Rabbit(0, 1,0),        new Rabbit(0, 2,0), new Grass(0, 3), new Grass(0, 4), new Grass(0, 5) },
@@ -89,42 +115,63 @@ public class Grassland {
         //     { new Grass(5, 0),     new Grass(5, 1),    new Carrot(5, 2), new Grass(3, 3), new Grass(5, 4), new Grass(5, 5) },
         // };
 
-
         Random random = new Random(); 
         for (int row = 0; row < this.height; row++) {
+            for (int column = 0; column < this.width; column++) {                
+                int lifeBeing = -1;
 
-            for (int column = 0; column < this.width; column++) {
-                // Generate new cells randomly.
-                int typeOfLife = GRASS;
-                
-                int randomPercentage = random.nextInt(MAX_PERCENTAGE + 1);
+                int randomPercentage = random.nextInt(MAX_PERCENTAGE + 1); // 0 - 100
 
-                if (randomPercentage < GRASS_PERCENTAGE) {
-                    typeOfLife = GRASS;
-                }
-                else if (randomPercentage >= GRASS_PERCENTAGE &&
-                         randomPercentage < GRASS_PERCENTAGE + CARROT_PERCENTAGE) {
-                    typeOfLife = CARROT;
-                }
-                else if(randomPercentage >= GRASS_PERCENTAGE + CARROT_PERCENTAGE &&
-                        randomPercentage < MAX_PERCENTAGE) {
-                    typeOfLife = RABBIT;
+                int cumulativeGrass = this.grassPercentage;
+                int cumulativeRabbit = cumulativeGrass + this.rabbitPercentage;
+                if (randomPercentage < cumulativeGrass) {
+                    lifeBeing = GRASS;
+                } else if (randomPercentage < cumulativeRabbit) {
+                    lifeBeing = RABBIT;
+                } else {
+                    lifeBeing = CARROT;
                 }
 
-                switch (typeOfLife) {
-                    case GRASS:
-                        break;
+                // HashMap<Integer,Integer> percents = new HashMap<>(4, 1.0f); // supports 3 values and does NOT increase its size
+                // percents.put(this.grassPercentage, GRASS);
+                // percents.put(this.rabbitPercentage, RABBIT);
+                // percents.put(this.carrotPercentage, CARROT);
+
+                // ArrayList<Integer> sortedPercents = new ArrayList<>(percents.keySet());
+                // Collections.sort(sortedPercents);
+
+                // if (randomPercentage < sortedPercents.get(0)) { // Lowest value
+                //     lifeBeing = percents.getOrDefault(sortedPercents.get(0), -1);
+                // }
+                // else if (randomPercentage < sortedPercents.get(1)) {
+                //     lifeBeing = percents.getOrDefault(sortedPercents.get(1), -1);
+                // }
+                // else if (randomPercentage < sortedPercents.get(2)) { // Higher value
+                //     lifeBeing = percents.getOrDefault(sortedPercents.get(2), -1);
+                // }
+                // else {
+                //     throw new Exception("Unexpected error in the percentages calculation.");
+                // }
+
+                switch (lifeBeing) {
+                    case GRASS: 
+                        // stays with grass 
+                        break; 
+                    
                     case RABBIT:
-                        this.meadowArr[row][column] = new Rabbit(row, column, 0);
+                        this.meadowArr[row][column] = new Rabbit(row, column, this.starveTime);
                         break;
+
                     case CARROT:
                         this.meadowArr[row][column] = new Carrot(row, column);
                         break;
+
+                    default:
+                        throw new Exception("Invalid lifeBeing value.");
                 }
             }
         }
     }
-
 
     /**
      *  width() returns the width of an Grassland object.

@@ -23,7 +23,7 @@ public class InputWindow extends JFrame implements ActionListener {
 
     public InputWindow() {
         super("Settings");
-        this.setSize(200, 160);
+        this.setSize(300, 200);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
 

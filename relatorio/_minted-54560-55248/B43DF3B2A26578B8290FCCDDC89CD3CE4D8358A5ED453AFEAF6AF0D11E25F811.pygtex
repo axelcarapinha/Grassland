@@ -1,0 +1,3 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{g+go}{javac life\PYGZus{}beings/*.java \PYGZam{}\PYGZam{} javac exceptions/*.java \PYGZam{}\PYGZam{} javac main/*.java \PYGZam{}\PYGZam{} java main.Main}
+\end{Verbatim}

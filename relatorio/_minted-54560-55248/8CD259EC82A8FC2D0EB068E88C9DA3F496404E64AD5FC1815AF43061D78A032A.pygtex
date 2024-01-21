@@ -1,0 +1,13 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kd}{public}\PYG{+w}{ }\PYG{n}{Grassland}\PYG{+w}{ }\PYG{n+nf}{timeStep}\PYG{p}{()}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{	}\PYG{n}{Grassland}\PYG{+w}{ }\PYG{n}{newGrassland}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{Grassland}\PYG{p}{(}\PYG{k}{this}\PYG{p}{.}\PYG{n+na}{width}\PYG{p}{,}\PYG{+w}{ }\PYG{k}{this}\PYG{p}{.}\PYG{n+na}{height}\PYG{p}{,}\PYG{+w}{ }\PYG{k}{this}\PYG{p}{.}\PYG{n+na}{starveTime}\PYG{p}{);}
+\PYG{+w}{		}\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{row}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{row}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{k}{this}\PYG{p}{.}\PYG{n+na}{height}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{row}\PYG{o}{++}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{			}\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{column}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{column}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{k}{this}\PYG{p}{.}\PYG{n+na}{width}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{column}\PYG{o}{++}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{				}\PYG{c+c1}{// Atualização do novo Grassland depois do atual ter passado pelas regras.}
+\PYG{+w}{			}\PYG{p}{\PYGZcb{}}
+\PYG{+w}{		}\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{	}\PYG{c+c1}{// Retornamos um novo Grassland.}
+\PYG{+w}{	}\PYG{k}{return}\PYG{+w}{ }\PYG{n}{newGrassland}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

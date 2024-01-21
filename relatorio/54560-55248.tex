@@ -238,7 +238,8 @@
 				+Rabbit(int row, int column) \\
 				+starve() \\
 				+eatCarrot() \\
-				+isDead(int grasslandStarveTime) : boolean
+				+isDead(int grasslandStarveTime) : boolean \\
+				+toString() : String
 			};
 
 			% Merge Rabbit Nodes.
@@ -249,7 +250,8 @@
 			\node [draw, rectangle, left=of Rabbit, text width=4.1cm, align=center, fill=light_blue] (Carrot) {Carrot};
 			\node [draw, rectangle, text width=4.1cm, below=0.0cm of Carrot, align=left] (carrot_attributes) {};
 			\node [draw, rectangle, text width=4.1cm, below=0.0cm of carrot_attributes, align=left] (carrot_methods) {
-				+Carrot(int row, int column)
+				+Carrot(int row, int column) \\
+				+toString() : String
 			};
 
 			% Merge Carrot Nodes.
@@ -260,7 +262,8 @@
 			\node [draw, rectangle, right=of Rabbit, text width=4.0cm, align=center, fill=light_blue] (Grass) {Grass};
 			\node [draw, rectangle, text width=4.0cm, below=0.0cm of Grass, align=left] (grass_attributes) {};
 			\node [draw, rectangle, text width=4.0cm, below=0.0cm of grass_attributes, align=left] (grass_methods) {
-				+Grass(int row, int column)
+				+Grass(int row, int column) \\
+				+toString() : String
 			};
 
 			% Merge Grass Nodes.

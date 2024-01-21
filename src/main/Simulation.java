@@ -20,10 +20,9 @@ public class Simulation {
 
         public static void startGrassland(Grassland mea) {
             /**
-                *  Visit each cell (in a roundabout order); randomly place a rabbit, carrot,
-                *  or nothing in each.
-                */
-
+            *  Visit each cell (in a roundabout order); randomly place a rabbit, carrot,
+            *  or nothing in each.
+            */
             Random random = new Random(0);      // Create a "Random" object with seed 0
             int x = 0;
             int y = 0;
@@ -39,7 +38,6 @@ public class Simulation {
                             } else if (r > 1500000000) {     // ~15% of cells start with rabbit
                                 mea.addRabbit(x, y);
                             }
-
                         }
                     }
                 }
@@ -112,7 +110,6 @@ public class Simulation {
            /**
             *  Create a "Canvas" we can draw upon; attach it to the window.
             */
-
            Canvas canvas = new Canvas();
            canvas.setBackground(Color.white);
            canvas.setSize(i * cellSize, j * cellSize);
@@ -134,8 +131,8 @@ public class Simulation {
             try {
 
                 mea = new Grassland(i, j, starveTime);
-                // mea.startGrasslandLife(); // has a built-in random
-                Simulation.startGrassland(mea);
+                mea.startGrasslandLife(); // has a built-in random
+                // Simulation.startGrassland(mea);
 
                 // Perform timesteps forever. 
                 int i = 0;
@@ -163,6 +160,9 @@ public class Simulation {
             } catch(InvalidGrasslandException e) {
                 e.printStackTrace();
                 e.getMessage();
+            } catch(Exception e) { // already covers the InputMismatchException 
+                e.getMessage();
+                e.printStackTrace();
             }
             // System.exit(0);
        }

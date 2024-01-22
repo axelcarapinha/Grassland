@@ -1,0 +1,502 @@
+% !TeX program = xelatex -shell-escape
+
+\documentclass {report}
+\usepackage{amsmath} % for math symbols and more
+\usepackage{graphicx} % for images
+\usepackage{minted}   % syntax highlighting for code listings
+\usepackage{titlepic} % picture in the title page
+\usepackage{fontspec} % XelAtex and LuaTex font selection
+\usepackage{enumitem}
+%\usepackage[romanian]{babel}
+\usepackage{listings}
+\usepackage{tcolorbox}
+\usepackage{clipboard}
+
+\definecolor{codeblue}{RGB}{42,0,255}
+\definecolor{codegreen}{RGB}{0,128,0}
+\definecolor{codegray}{RGB}{128,128,128}
+\definecolor{codepurple}{RGB}{160,32,240}
+\definecolor{codebg}{RGB}{242,242,242}
+
+\lstset{
+  language=SQL,
+  basicstyle=\ttfamily,
+  keywordstyle=\color{codeblue},
+  stringstyle=\color{codegreen},
+  commentstyle=\color{codegray},
+  numberstyle=\tiny\color{codepurple},
+  breakatwhitespace=false,
+  breaklines=true,
+  captionpos=b,
+  keepspaces=true,
+  numbers=left,
+  numbersep=5pt,
+  showspaces=false,
+  showstringspaces=false,
+  showtabs=false,
+  tabsize=2,
+  backgroundcolor=\color{codebg},
+}
+
+\newclipboard{myclipboard}
+
+% Custom environment with "COPY TO CLIPBOARD" button
+\newtcolorbox{copiablecodebox}[1][]{%
+  enhanced jigsaw, 
+  breakable, 
+  colback=codebg, 
+  colframe=black, 
+  boxrule=0.5pt, 
+  sharp corners, 
+  bottomrule=2pt, 
+  toprule=0.5pt, 
+  leftrule=0.5pt, 
+  rightrule=0.5pt,
+  borderline west={3pt}{0pt}{codeblue},
+  arc=0pt,
+  outer arc=0pt,
+  title={#1},
+  attach boxed title to top left={xshift=10pt, yshift=-3pt},
+  minipage boxed title,
+  boxed title style={%
+    colback=codeblue,
+    sharp corners,
+    boxrule=0.5pt,
+  },
+  code upper*={\setbox0=\vbox\bgroup},
+  code lower*={\egroup\begin{myclipboard}\unvbox0\end{myclipboard}},
+}
+
+
+
+\setmainfont[ItalicFont={timesi.ttf}, % support for italic
+						BoldItalicFont={timesbd.ttf}]{times.ttf}
+% \definecolor{light_blue}{RGB}{212,235,242}
+
+% Edit table of contents links.
+% \hypersetup{ 
+%     colorlinks=true,  %set true if you want colored links
+%     linktoc=all,      %set to all if you want both sections and subsections linked
+%     linkcolor=black,  %choose some color if you want links to stand out
+% }
+
+\title {Relatório de Bases de Dados}
+
+\titlepic{\includegraphics[width=\textwidth]{"logoUE.jpeg"}}
+\author{
+    Axel Amoroso Carapinha\\
+    \texttt{55248}
+    \and
+    Leonel Figueira Caetano \\
+  \texttt{00000}
+}
+
+\begin {document}
+\date{}
+\begin{figure}[t]
+	\vspace {-2cm}
+	\centering
+	%\includegraphics[width=0.4\textwidth]{uni_logo.png}
+\end{figure}
+\maketitle
+
+\renewcommand{\thesection}{\arabic{section}}
+\makeatother
+
+\tableofcontents 
+\newpage
+
+\section{Abstract}
+	\hspace{1cm}Este trabalho teve como objetivo desenvolver uma base de dados 
+    com base em relações já definidas e inserir dados na mesma.
+    Além disso, deviam-se fazer queries de modo recolher informações 
+    que nos poderiam interessar numa aplicação real do exemplo do enunciado.
+
+\section{Resumo do projeto}
+	\hspace{1cm}Devia-se criar uma base de dados para gerir a informação de uma  
+    rede social de \textit{Fãs de Literatura}. Para se usar a mesma, 
+    inseriram-se dados fictícios, e escreveram-se queries 
+    que permitam recolher essa informação.
+
+\section{Introdução}
+	O objetivo deste relatório é mostrar as respostas do referido trabalho.
+
+\section{Respostas}
+\subsection{Questão 1}
+\textit{Indique as chaves primárias, candidatas e estrangeiras de cada relação.}
+
+\begin{enumerate}[label=-]
+
+    \item \textbf{membro(Nome, IdMemb, Pais, Cidade, DataNasc)}
+    \begin{enumerate}[label=\arabic*.]
+        \item Chave primária
+            \begin{itemize}
+                \item \{IdMemb\}
+            \end{itemize}
+        \item Chave candidata
+            \begin{itemize}
+                \item \{IdMemb\}
+            \end{itemize}
+        \item Chaves estrangeiras
+            \begin{itemize}
+                \item NENHUMA
+            \end{itemize}
+    \end{enumerate}
+    
+    \item \textbf{amigo(IdMemb1, IdMemb2)}
+    \begin{enumerate}[label=\arabic*.]
+        \item Chaves primárias
+            \begin{itemize}
+                \item \{IdMemb1, IdMemb2\}
+            \end{itemize}
+        \item Chave candidata
+            \begin{itemize}
+                \item \{IdMemb1, IdMemb2\}
+            \end{itemize}
+        \item Chaves estrangeiras
+            \begin{itemize}
+                \item \{IdMemb1\}, que referencia a chave \{IdMemb\} na relação \textit{membro}
+                \item \{IdMemb2\}, que referencia a chave \{IdMemb\} na relação \textit{membro}
+            \end{itemize}
+    \end{enumerate}
+    
+    \item \textbf{gosta(IdMemb, ISBN)}
+    \begin{enumerate}[label=\arabic*.]
+        \item Chave primária
+            \begin{itemize}
+                \item \{IdMemb, ISBN\}
+            \end{itemize}
+        \item Chave candidata
+            \begin{itemize}
+                \item \{IdMemb, ISBN\}
+            \end{itemize}
+        \item Chaves estrangeiras
+            \begin{itemize}
+                \item \{IdMemb\}, que referencia a chave \{IdMemb\} na relação \textit{membro}
+                \item \{ISBN\}, que referencia a chave \{ISBN\} na relação \textit{livro}
+            \end{itemize}
+    \end{enumerate}
+    
+    \item \textbf{livro(ISBN, Titulo)}
+    \begin{enumerate}[label=\arabic*.]
+        \item Chave primária
+            \begin{itemize}
+                \item \{ISBN\}
+            \end{itemize}
+        \item Chave candidata
+            \begin{itemize}
+                \item \{ISBN\}
+            \end{itemize}
+        \item Chaves estrangeiras
+            \begin{itemize}
+                \item NENHUMA
+            \end{itemize}
+    \end{enumerate}
+    
+    \item \textbf{genero(ISBN, Genero)}
+    \begin{enumerate}[label=\arabic*.]
+        \item Chave primária
+            \begin{itemize}
+                \item \{ISBN, Genre\}
+            \end{itemize}
+        \item Chave candidata
+            \begin{itemize}
+                \item \{ISBN, Genre\}
+            \end{itemize}
+        \item Chave estrangeira
+            \begin{itemize}
+                \item \{ISBN\}, que referencia a chave \{ISBN\} na relação \textit{livro}
+            \end{itemize}
+    \end{enumerate}
+    
+    \item \textbf{autoria(ISBN, Coda)}
+    \begin{enumerate}[label=\arabic*.]
+        \item Chave primária
+            \begin{itemize}
+                \item \{ISBN, Coda\}
+            \end{itemize}
+        \item Chave candidata
+            \begin{itemize}
+                \item \{ISBN, Coda\}
+            \end{itemize}
+        \item Chaves estrangeiras
+            \begin{itemize}
+                \item \{ISBN\}, que referencia a chave \{ISBN\} na relação \textit{livro}
+                \item \{Coda\}, que referencia a chave \{Coda\} na relação \textit{autor}
+            \end{itemize}
+    \end{enumerate}
+    
+    \item \textbf{autor(Coda, Nome, Pais)}
+    \begin{enumerate}[label=\arabic*.]
+        \item Chave primária
+            \begin{itemize}
+                \item \{CodA\}
+            \end{itemize}
+        \item Chave candidata
+            \begin{itemize}
+                \item \{CodA\}
+            \end{itemize}
+        \item Chaves estrangeiras
+            \begin{itemize}
+                \item NENHUMA
+            \end{itemize}
+    \end{enumerate}
+\end{enumerate}
+
+
+% \clearpage % Forces all figures above it in the .tex file to be printed before continuing with the text. This can leave large white spaces. More info in https://tex.stackexchange.com/questions/8625/force-figure-placement-in-text
+
+
+\subsection{Questão 2}
+\textbf{Ver ficheiro em anexo:} \textit{Tabelas+Dados.sql}.
+
+\subsection{Questão 3}
+\textbf{Ver ficheiro em anexo:} \textit{Tabelas+Dados.sql}.
+
+\subsection{Questão 4}
+
+\textbf{Views criadas para a resolução da questão:}
+
+\begin{lstlisting}
+    CREATE VIEW AgathaISBNs as (
+      SELECT AutoriaISBN as ISBN
+      FROM Autoria JOIN Autor ON AutoriaCoda = Autor.Coda
+      WHERE Autor.Nome = 'Agatha Christie'
+    );
+
+    -- Usada em b), d), g), h)
+    CREATE VIEW GostaAgatha AS (
+      SELECT DISTINCT GostaIdMemb as IdMemb
+      FROM Gosta JOIN AgathaISBNs ON GostaISBN = AgathaISBNs.ISBN
+    );
+\end{lstlisting}
+\[
+\text{AgathaISBNs} \leftarrow \pi_{\text{ISBN}}\left(\rho_{\text{ISBN/AutoriaISBN}}\left(\sigma_\text{Nome = 'Agatha Christie'}}(\text{Autor} \bowtie_{\text{AutoriaCoda = Coda}} \text{Autoria})\right)\right)
+\]
+\[
+\text{GostaAgatha} \leftarrow \pi_{\text{GostaIdMemb}}\left(\delta_{\text{IdMemb, ISBN}}(\text{Gosta} \bowtie_{\text{GostaISBN = ISBN}} \text{AgathaISBNs})\right)
+\]
+\vspace{0.5cm}
+
+\begin{lstlisting}   
+    -- Usada em e), f), i), q) 
+    CREATE VIEW AmigosOleitor AS (
+      SELECT IdAmigo1 AS IdMemb
+      FROM Amigo 
+      WHERE IdAmigo2 = 'oleitor'
+       
+      UNION
+       
+      SELECT IdAmigo2 AS IdMemb
+      FROM Amigo 
+      WHERE IdAmigo1 = 'oleitor'
+    );
+\end{lstlisting}
+\[
+\text{AmigosOleitor} \leftarrow \pi_{\text{IdAmigo1}}(\sigma_{\text{IdAmigo2 = 'oleitor'}}(\text{Amigo})) \cup \pi_{\text{IdAmigo2}}(\sigma_{\text{IdAmigo1 = 'oleitor'}}(\text{Amigo}))
+\]
+\vspace{0.5cm}
+
+
+    
+\begin{lstlisting}    
+    CREATE VIEW FranciscoISBNs as (
+      SELECT AutoriaISBN as ISBN
+      FROM Autoria JOIN Autor ON AutoriaCoda = Autor.Coda
+      WHERE Autor.Nome = 'Francisco José Viegas'
+    );
+
+    -- Usada em g), h)
+    CREATE VIEW GostaFrancisco AS (
+      SELECT DISTINCT GostaIdMemb as IdMemb
+      FROM Gosta JOIN FranciscoISBNs ON GostaISBN = FranciscoISBNs.ISBN
+    );
+\end{lstlisting}
+\[
+\text{FranciscoISBNs} \leftarrow \pi_{\text{AutoriaISBN}}\left(\sigma_{\substack{ \\ \text{Nome = 'Francisco José Viegas'}}}(\text{Autoria} \bowtie_{\text{AutoriaCoda = Autor.Coda}} \text{Autor})\right)
+\]
+\[
+\text{GostaFrancisco} \leftarrow \pi_{\text{GostaIdMemb}}(\delta_{\text{IdMemb, ISBN}}(\text{Gosta} \bowtie_{\text{GostaISBN = ISBN}} \text{FranciscoISBNs}))
+\]
+\vspace{0.5cm}
+
+
+\begin{lstlisting}    
+    -- Usada em l), m), n)
+    CREATE VIEW LivrosStats AS (
+      SELECT l.ISBN as ISBN,
+             l.Titulo,
+             COUNT(DISTINCT Genero.Genero)     as numGeneros,
+             COUNT(DISTINCT Gosta.GostaIdMemb) as numGostos
+      FROM Livro AS l, Genero, Gosta
+      WHERE l.ISBN = GeneroISBN AND
+            l.ISBN = GostaISBN
+      GROUP BY ISBN
+      ORDER BY ISBN
+    );
+\end{lstlisting}
+\textit{Álgebra relacional no fim do documento.}
+
+
+\vspace{0.5cm}
+
+\begin{lstlisting}    
+    CREATE VIEW AmigosSimetrico AS (
+        SELECT IdAmigo1 as IdMemb, IdAmigo2 as Idamigo
+        FROM Amigo 
+        
+        UNION
+        
+        SELECT idamigo2 as IdMemb, IdAmigo1 as idAmigo
+        FROM Amigo 
+        );
+        
+    -- Usada em o), p)
+    CREATE VIEW numAmigos AS (
+      SELECT idmemb, COUNT(Idamigo) as  n
+      FROM AmigosSimetrico
+      GROUP BY idmemb
+      ORDER BY n DESC
+    );
+
+    COMMIT;
+\end{lstlisting}
+   \[
+   \text{AmigosSimetrico} \leftarrow \pi_{\text{IdAmigo1, IdAmigo2}}(\text{Amigo}) \cup \pi_{\text{idamigo2, IdAmigo1}}(\text{Amigo})
+   \]
+   \[
+   \text{numAmigos} \leftarrow \pi_{\text{idmemb, n}}\left(\gamma_{\text{idmemb, COUNT(Idamigo) as n}}(\text{AmigosSimetrico})\right)
+   \]
+\vspace{0.5cm}
+
+\textit{Indique a expressão em SQL e em Álgebra Relacional para responder às seguintes perguntas:}
+
+\subsection{a)}
+\textit{Qual é o nome dos autores de obras do género drama? (se não inseriu
+o género drama, insira-o e insira também este género em pelo menos
+uma obra)}
+\[
+\pi_{\text{Autor.Nome}}\left(\sigma_{\text{Genero} = \text{'Drama'} \land \text{GeneroISBN} = \text{AutoriaISBN} \land \text{Coda} = \text{AutoriaCoda}}(\text{Autor} X \text{Genero} X \text{Autoria})\right)
+\]
+
+\subsection{b)}
+\textit{Qual o nome dos membros que gostam de livros da Agatha Christie?
+(se não inseriu a autora insira e insira também pelo menos um gosto
+de um membro numa obra da autora}
+\[
+\pi_{\text{Membro.nome}}\left(\sigma_{\text{Membro.IdMemb} \in \pi_{\text{IdMemb}}(\text{GostaAgatha})}(\text{Membro})\right)
+\]
+
+\subsection{c)}
+\textit{Qual o nome dos membros que gostam de um livro de um autor que nasceu no seu país?
+(se não inseriu o autor, insira e adicione pelo menos um gosto de um membro numa obra do autor)}
+\[ 
+\pi_{\text{Membro.nome}}\left(\sigma_{\substack{\text{Membro.IdMemb} = \text{GostaIdMemb} \\ \land \\ \text{Autoria.autoriaisbn} = \text{GostaISBN} \\ \land \\ \text{AutoriaCoda} = \text{Autor.Coda} \\ \land \\ \text{Membro.Pais} = \text{Autor.Pais}}}(\text{Membro} X \text{Gosta} X \text{Autoria} X \text{Autor})\right)
+\]
+
+\subsection{d)}
+\textit{Quais os membros que NÃO gostam de algum livro da Agatha Christie?}
+\[
+\pi_{\text{Membro.nome}}\left(\sigma_{\text{Membro.IdMemb} \notin \pi_{\text{IdMemb}}(\text{GostaAgatha})}(\text{Membro})\right)
+\]
+
+\subsection{e)}
+\textit{Quais os membros que NÃO são amigos do membro que com o idMemb\texttt{oleitor}?}
+\[
+\pi_{\text{Membro.nome}}\left(\sigma_{\text{Membro.IdMemb} \notin \pi_{\text{IdMemb}}(\text{AmigosOleitor})}(\text{Membro})\right)
+\]
+
+\subsection{f)}
+\textit{Qual o nome dos amigos do \texttt{oleitor} que são mais jovens que ele?}
+\textit{Álgebra relacional no fim do documento.}
+
+\subsection{g)}
+\textit{Qual o nome dos membros que gostam de livros da Agatha Christie e do Francisco José Viegas?}
+\[
+\pi_{\text{Membro.nome}}\left((\sigma_{\text{GostaAgatha.IdMemb = Membro.IdMemb}}(\text{Membro} \bowtie \text{GostaAgatha}) \cap \sigma_{\text{GostaFrancisco.IdMemb = Membro.IdMemb}}(\text{Membro} \bowtie \text{GostaFrancisco}))\right) \bowtie_{\text{Membro.nome}} \text{Membro}
+\]
+\textit{Álgebra relacional no fim do documento.}
+%
+\subsection{h)}
+\textit{Qual o nome dos membros que gostam de livros da Agatha Christie ou do Francisco José Viegas?}
+\[
+\pi_{\text{Membro.nome}}\left(\pi_{\text{Membro.nome}}(\sigma_{\text{Membro.IdMemb} = \text{GostaAgatha.IdMemb}}(\text{Membro} \bowtie \text{GostaAgatha})) \cup \pi_{\text{Membro.nome}}(\sigma_{\text{Membro.IdMemb} = \text{GostaFrancisco.IdMemb}}(\text{Membro} \bowtie \text{GostaFrancisco}))\right)
+\]
+\textit{Álgebra relacional no fim do documento.}
+
+\subsection{i)}
+\textit{Quantos amigos tem o membro \texttt{oleitor}?}
+\[
+\text{COUNT}(\pi_{\text{IdMemb}}(\text{AmigosOleitor}))
+\]
+
+\subsection{j)}
+\textit{Qual é o membro que tem mais amigos?}
+\[
+\pi_{\text{Membro.Nome}}\left(\text{Membro} \bowtie \text{MembroMaisAmigos}\right)
+\]
+
+\subsection{k)}
+\textit{Qual o nome dos membros que são amigos do membro que gosta de mais livros?}
+\[
+\pi_{\text{Membro.Nome}}\left(\pi_{\text{Membro.Nome}}(\sigma_{\substack{\text{Membro.IdMemb} = \text{Amigo.IdAmigo1} \\ \text{e} \\ \text{Amigo.IdAmigo2} = \text{MaiorFaLivros.IdMemb}}}\text{Membro} \bowtie \text{Amigo} \bowtie \text{MaiorFaLivros} \right) \cup \pi_{\text{Membro.Nome}}\left(\pi_{\text{Membro.Nome}}(\sigma_{\substack{\text{Membro.IdMemb} = \text{Amigo.IdAmigo2} \\ \text{e} \\ \text{Amigo.IdAmigo1} = \text{MaiorFaLivros.IdMemb}}}\text{Membro} \bowtie \text{Amigo} \bowtie \text{MaiorFaLivros} \right)
+\]
+%
+
+\subsection{l)}
+\textit{Para cada livro, indique o número de géneros.}
+\[
+\pi_{\text{Titulo, numGeneros}}\left(\text{LivrosStats} \right)
+\]
+
+\subsection{m)}
+\textit{Para cada livro, indique o número de géneros e o número de gostos.}
+\[
+\pi_{\text{Titulo, numGeneros, numGostos}}\left(\text{LivrosStats} \right)
+\]
+
+\subsection{n)}
+\textit{Para cada autor, indique o número de livros, o número de géneros e o número de gostos.}
+\[
+\pi_{\text{Autor.Nome, COUNT(DISTINCT AutoriaISBN) as NumLivros, COUNT(DISTINCT GenerosAutores.Genero) AS NumGeneros, SUM(DISTINCT numGostos) as NumGostos}}\left(\text{Autoria} \bowtie \text{Autor} \bowtie \text{GenerosAutores} \bowtie \text{LivrosStats} \right)
+\]
+\textit{Álgebra relacional no fim do documento.}
+
+
+\subsection{o)}
+\textit{Para cada membro, indique o número de amigos e o número de livros de que gosta.}
+\[
+\pi_{\text{Membro.Nome, NumAmigos.n as NumAmigos, COUNT(GostaISBN) as NumLivrosGosta}}\left(\text{Membro} \bowtie \text{NumAmigos} \bowtie \text{Gosta} \right)
+\]
+\textit{Álgebra relacional no fim do documento.}
+
+\subsection{p)}
+\textit{Qual o nome dos membros que são amigos de todos os membros?}
+\[
+\text{AmigosTodosMembros} \leftarrow \pi_{\text{IdMemb}}\left(\sigma_{\text{n = NumMembros}}\left(\text{NumAmigos} \bowtie_{\text{n = NumMembros}} \left(\pi_{\text{COUNT(Membro.IdMemb) - 1 as NumMembros}}(\text{Membro})\right)\right)\right)
+\]
+\textit{Álgebra relacional no fim do documento.}
+
+
+\[
+\pi_{\text{Membro.nome}}\left(\text{Membro} \bowtie \text{AmigosTodosMembros} \right)
+\]
+
+
+\subsection{q)}
+\textit{Quais os títulos dos livros de que todos os amigos do leitor gostam?}
+\[
+\pi_{\text{Titulo}}(Livro) \, \div \, \pi_{\text{IdMemb}}(\text{AmigosOleitor} \, \ominus \, \pi_{\text{GostaIdMemb, GostaIsbn}}(\text{Gosta} \, \bowtie_{\text{GostaIsbn = l.Isbn}} \, \pi_{\text{Isbn}}(l)))
+\]
+\textit{Álgebra relacional no fim do documento.}
+%
+
+
+\section{Conclusão}
+\hspace{1cm}Neste trabalho conseguimos concluir todos os objetivos com sucesso,
+desde a criação da base de dados às queries para se recolher informação.
+Consideramos como principal ponto extra o facto de nos termos preocupado
+em fazer de vários modos diferentes, aprendendo as formas mais eficazes possíveis.
+	
+
+\end {document}

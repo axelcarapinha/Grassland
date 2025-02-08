@@ -9,4 +9,4 @@ As for the other tasks, I focused on the logic and planning for the starting poi
 The project was graded 20/20.
 
 ## Results
-![Conway's Game of Life](/relatorio/game\ life.png)
+![Game Life](./report/game%20life.png)
